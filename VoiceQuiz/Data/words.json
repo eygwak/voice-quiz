@@ -1,0 +1,467 @@
+{
+  "version": 1,
+  "generated_at": "2025-12-13T11:03:50Z",
+  "categories": [
+    {
+      "id": "food",
+      "title": "Delicious Food",
+      "words": [
+        {
+          "word": "pizza",
+          "synonyms": [
+            "pepperoni pizza",
+            "cheese pizza",
+            "a slice of pizza"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "pizza",
+            "pepperoni",
+            "cheese",
+            "slice",
+            "italian"
+          ]
+        },
+        {
+          "word": "kimchi",
+          "synonyms": [
+            "spicy cabbage",
+            "fermented cabbage"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "kimchi",
+            "cabbage",
+            "fermented",
+            "korean",
+            "spicy"
+          ]
+        },
+        {
+          "word": "pancake",
+          "synonyms": [
+            "flapjack",
+            "hotcake"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "pancake",
+            "syrup",
+            "breakfast",
+            "flour",
+            "pan"
+          ]
+        },
+        {
+          "word": "sushi",
+          "synonyms": [
+            "raw fish rolls",
+            "rice rolls"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "sushi",
+            "japanese",
+            "raw",
+            "roll",
+            "rice"
+          ]
+        },
+        {
+          "word": "avocado",
+          "synonyms": [
+            "alligator pear"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "avocado",
+            "guacamole",
+            "green",
+            "toast",
+            "pit"
+          ]
+        },
+        {
+          "word": "popcorn",
+          "synonyms": [
+            "movie snack",
+            "popped corn"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "popcorn",
+            "corn",
+            "kernels",
+            "butter",
+            "movie"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "animals",
+      "title": "Animals",
+      "words": [
+        {
+          "word": "giraffe",
+          "synonyms": [
+            "long-necked animal"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "giraffe",
+            "neck",
+            "spots",
+            "africa",
+            "tall"
+          ]
+        },
+        {
+          "word": "penguin",
+          "synonyms": [
+            "flightless bird in the cold"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "penguin",
+            "antarctica",
+            "bird",
+            "ice",
+            "tuxedo"
+          ]
+        },
+        {
+          "word": "dolphin",
+          "synonyms": [
+            "smart sea mammal"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "dolphin",
+            "ocean",
+            "mammal",
+            "swim",
+            "smart"
+          ]
+        },
+        {
+          "word": "kangaroo",
+          "synonyms": [
+            "marsupial that hops"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "kangaroo",
+            "australia",
+            "pouch",
+            "hop",
+            "marsupial"
+          ]
+        },
+        {
+          "word": "octopus",
+          "synonyms": [
+            "eight-armed sea animal"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "octopus",
+            "tentacles",
+            "eight",
+            "sea",
+            "ink"
+          ]
+        },
+        {
+          "word": "hedgehog",
+          "synonyms": [
+            "small spiky animal"
+          ],
+          "difficulty": 3,
+          "taboo": [
+            "hedgehog",
+            "spikes",
+            "spiny",
+            "small",
+            "roll up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jobs",
+      "title": "Jobs",
+      "words": [
+        {
+          "word": "firefighter",
+          "synonyms": [
+            "fire fighter",
+            "fireman"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "firefighter",
+            "fire",
+            "truck",
+            "hose",
+            "rescue"
+          ]
+        },
+        {
+          "word": "dentist",
+          "synonyms": [
+            "tooth doctor"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "dentist",
+            "teeth",
+            "tooth",
+            "clinic",
+            "cavity"
+          ]
+        },
+        {
+          "word": "pilot",
+          "synonyms": [
+            "airplane driver",
+            "aircraft pilot"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "pilot",
+            "plane",
+            "cockpit",
+            "fly",
+            "airport"
+          ]
+        },
+        {
+          "word": "chef",
+          "synonyms": [
+            "cook",
+            "head cook"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "chef",
+            "cook",
+            "kitchen",
+            "restaurant",
+            "recipe"
+          ]
+        },
+        {
+          "word": "detective",
+          "synonyms": [
+            "investigator"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "detective",
+            "case",
+            "crime",
+            "investigate",
+            "clues"
+          ]
+        },
+        {
+          "word": "electrician",
+          "synonyms": [
+            "wire specialist"
+          ],
+          "difficulty": 3,
+          "taboo": [
+            "electrician",
+            "wires",
+            "electric",
+            "power",
+            "circuit"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "objects",
+      "title": "Everyday Objects",
+      "words": [
+        {
+          "word": "umbrella",
+          "synonyms": [
+            "rain cover"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "umbrella",
+            "rain",
+            "wet",
+            "handle",
+            "shade"
+          ]
+        },
+        {
+          "word": "backpack",
+          "synonyms": [
+            "school bag",
+            "rucksack"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "backpack",
+            "bag",
+            "straps",
+            "school",
+            "carry"
+          ]
+        },
+        {
+          "word": "refrigerator",
+          "synonyms": [
+            "fridge"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "refrigerator",
+            "fridge",
+            "cold",
+            "kitchen",
+            "food"
+          ]
+        },
+        {
+          "word": "headphones",
+          "synonyms": [
+            "earphones",
+            "headset"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "headphones",
+            "music",
+            "ears",
+            "listen",
+            "wireless"
+          ]
+        },
+        {
+          "word": "flashlight",
+          "synonyms": [
+            "torch"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "flashlight",
+            "light",
+            "dark",
+            "battery",
+            "torch"
+          ]
+        },
+        {
+          "word": "calendar",
+          "synonyms": [
+            "schedule board"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "calendar",
+            "dates",
+            "month",
+            "year",
+            "schedule"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minecraft",
+      "title": "Minecraft",
+      "words": [
+        {
+          "word": "creeper",
+          "synonyms": [
+            "green exploding mob"
+          ],
+          "difficulty": 2,
+          "taboo": [
+            "creeper",
+            "explode",
+            "green",
+            "mob",
+            "hiss"
+          ]
+        },
+        {
+          "word": "crafting table",
+          "synonyms": [
+            "workbench"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "crafting",
+            "table",
+            "workbench",
+            "grid",
+            "recipe"
+          ]
+        },
+        {
+          "word": "pickaxe",
+          "synonyms": [
+            "mining tool"
+          ],
+          "difficulty": 1,
+          "taboo": [
+            "pickaxe",
+            "mine",
+            "tool",
+            "stone",
+            "diamond"
+          ]
+        },
+        {
+          "word": "redstone",
+          "synonyms": [
+            "Minecraft electricity"
+          ],
+          "difficulty": 3,
+          "taboo": [
+            "redstone",
+            "power",
+            "wire",
+            "circuit",
+            "signal"
+          ]
+        },
+        {
+          "word": "nether",
+          "synonyms": [
+            "hell-like dimension"
+          ],
+          "difficulty": 3,
+          "taboo": [
+            "nether",
+            "dimension",
+            "portal",
+            "lava",
+            "ghast"
+          ]
+        },
+        {
+          "word": "ender dragon",
+          "synonyms": [
+            "final boss dragon"
+          ],
+          "difficulty": 3,
+          "taboo": [
+            "ender",
+            "dragon",
+            "boss",
+            "end",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ]
+}
