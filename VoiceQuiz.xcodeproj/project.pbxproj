@@ -6,13 +6,22 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		254D6939E68A0B9FFBB2F5EF /* Pods_VoiceQuiz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3073A39379F61EBA28B40D3A /* Pods_VoiceQuiz.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		3073A39379F61EBA28B40D3A /* Pods_VoiceQuiz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VoiceQuiz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		910BE7592EF3C09400AF6331 /* VoiceQuiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceQuiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D213EAAFEBAB24BB9BB2D38D /* Pods-VoiceQuiz.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceQuiz.debug.xcconfig"; path = "Target Support Files/Pods-VoiceQuiz/Pods-VoiceQuiz.debug.xcconfig"; sourceTree = "<group>"; };
+		D5C54A97BE65816F4ECDDE29 /* Pods-VoiceQuiz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VoiceQuiz.release.xcconfig"; path = "Target Support Files/Pods-VoiceQuiz/Pods-VoiceQuiz.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		910BE75B2EF3C09400AF6331 /* VoiceQuiz */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = VoiceQuiz;
 			sourceTree = "<group>";
 		};
@@ -23,17 +32,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				254D6939E68A0B9FFBB2F5EF /* Pods_VoiceQuiz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5DFE315766398410C583C024 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D213EAAFEBAB24BB9BB2D38D /* Pods-VoiceQuiz.debug.xcconfig */,
+				D5C54A97BE65816F4ECDDE29 /* Pods-VoiceQuiz.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		69F3F1C5A767AFB054A51664 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3073A39379F61EBA28B40D3A /* Pods_VoiceQuiz.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		910BE7502EF3C09400AF6331 = {
 			isa = PBXGroup;
 			children = (
 				910BE75B2EF3C09400AF6331 /* VoiceQuiz */,
 				910BE75A2EF3C09400AF6331 /* Products */,
+				5DFE315766398410C583C024 /* Pods */,
+				69F3F1C5A767AFB054A51664 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,9 +82,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 910BE7642EF3C09600AF6331 /* Build configuration list for PBXNativeTarget "VoiceQuiz" */;
 			buildPhases = (
+				FF5ABFEDFFC60E91F8DDB10F /* [CP] Check Pods Manifest.lock */,
 				910BE7552EF3C09400AF6331 /* Sources */,
 				910BE7562EF3C09400AF6331 /* Frameworks */,
 				910BE7572EF3C09400AF6331 /* Resources */,
+				F19AD3362D123CCB4340B8C0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -64,8 +96,6 @@
 				910BE75B2EF3C09400AF6331 /* VoiceQuiz */,
 			);
 			name = VoiceQuiz;
-			packageProductDependencies = (
-			);
 			productName = VoiceQuiz;
 			productReference = 910BE7592EF3C09400AF6331 /* VoiceQuiz.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +143,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F19AD3362D123CCB4340B8C0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VoiceQuiz/Pods-VoiceQuiz-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VoiceQuiz/Pods-VoiceQuiz-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VoiceQuiz/Pods-VoiceQuiz-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF5ABFEDFFC60E91F8DDB10F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VoiceQuiz-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		910BE7552EF3C09400AF6331 /* Sources */ = {
@@ -248,6 +320,7 @@
 		};
 		910BE7652EF3C09600AF6331 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D213EAAFEBAB24BB9BB2D38D /* Pods-VoiceQuiz.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -280,6 +353,7 @@
 		};
 		910BE7662EF3C09600AF6331 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D5C54A97BE65816F4ECDDE29 /* Pods-VoiceQuiz.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
