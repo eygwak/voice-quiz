@@ -10,32 +10,50 @@ import AVFoundation
 
 struct ContentView: View {
     @State private var microphonePermission: AVAudioSession.RecordPermission = .undetermined
+    @State private var showTestView = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "mic.fill")
-                .imageScale(.large)
-                .foregroundStyle(microphonePermission == .granted ? .green : .red)
-                .font(.system(size: 60))
+        NavigationView {
+            VStack(spacing: 20) {
+                Image(systemName: "mic.fill")
+                    .imageScale(.large)
+                    .foregroundStyle(microphonePermission == .granted ? .green : .red)
+                    .font(.system(size: 60))
 
-            Text("VoiceQuiz")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+                Text("VoiceQuiz")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
 
-            Text(permissionStatus)
-                .font(.headline)
-                .foregroundStyle(microphonePermission == .granted ? .green : .orange)
+                Text(permissionStatus)
+                    .font(.headline)
+                    .foregroundStyle(microphonePermission == .granted ? .green : .orange)
 
-            if microphonePermission != .granted {
-                Button("Request Microphone Permission") {
-                    requestMicrophonePermission()
+                if microphonePermission != .granted {
+                    Button("Request Microphone Permission") {
+                        requestMicrophonePermission()
+                    }
+                    .buttonStyle(.borderedProminent)
+                } else {
+                    NavigationLink(destination: TestConnectionView()) {
+                        HStack {
+                            Image(systemName: "antenna.radiowaves.left.and.right")
+                            Text("Test WebRTC Connection")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundStyle(.white)
+                        .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
                 }
-                .buttonStyle(.borderedProminent)
             }
-        }
-        .padding()
-        .onAppear {
-            checkMicrophonePermission()
+            .padding()
+            .onAppear {
+                checkMicrophonePermission()
+            }
+            .navigationTitle("VoiceQuiz")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 
