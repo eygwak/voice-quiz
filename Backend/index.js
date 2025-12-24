@@ -1,8 +1,23 @@
 import "dotenv/config";
 import express from "express";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 app.use(express.json());
+
+// Rate limiting: 디바이스당 10분에 20개 요청으로 제한
+// ⚠️ 주의: 단일 인스턴스(--max-instances=1)에서만 효과적
+// 다중 인스턴스 환경에서는 Redis/Firestore 기반 store 필요
+const tokenLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10분
+  max: 20, // 최대 20개 요청
+  message: { error: "Too many requests, please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // deviceId 기반 제한 (없으면 기본 IP 사용)
+  keyGenerator: (req) => req.body?.deviceId,
+  skip: (req) => !req.body?.deviceId, // deviceId 없으면 IP로 fallback
+});
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (!OPENAI_API_KEY) throw new Error("Missing OPENAI_API_KEY");
@@ -50,7 +65,7 @@ You are a player in a speed quiz game trying to GUESS the word based on the user
   return "You are a helpful assistant.";
 }
 
-app.post("/token", async (req, res) => {
+app.post("/token", tokenLimiter, async (req, res) => {
   try {
     const { deviceId, platform, appVersion, gameMode, currentWord, tabooWords } = req.body;
 

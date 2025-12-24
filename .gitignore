@@ -28,6 +28,12 @@ Podfile.lock
 .env
 Backend/.env
 
+# gcloud authentication
+auth_code.txt
+complete_auth.sh
+gcloud_auth.sh
+get_auth_url.sh
+
 # Build artifacts
 *.ipa
 *.dSYM.zip
