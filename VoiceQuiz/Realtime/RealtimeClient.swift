@@ -74,6 +74,9 @@ class RealtimeClient: NSObject {
             // Step 3: Create data channel
             dataChannelManager.createDataChannel(peerConnection: peerConnection)
 
+            // Small delay to ensure DataChannel is ready
+            try await Task.sleep(nanoseconds: 100_000_000) // 100ms
+
             // Step 4: Create WebRTC offer
             let offer = try await webRTCManager.createOffer()
             try await webRTCManager.setLocalDescription(offer)
