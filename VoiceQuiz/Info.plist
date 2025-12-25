@@ -3,6 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>VoiceQuiz needs access to your microphone to play the voice quiz game.</string>
+	<string>VoiceQuiz needs access to your microphone to recognize your voice answers in the quiz game.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>VoiceQuiz uses speech recognition to understand your answers and provide real-time feedback during the quiz.</string>
 </dict>
 </plist>

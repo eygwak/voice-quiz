@@ -5,18 +5,13 @@ import rateLimit from "express-rate-limit";
 const app = express();
 app.use(express.json());
 
-// Rate limiting: 디바이스당 10분에 20개 요청으로 제한
-// ⚠️ 주의: 단일 인스턴스(--max-instances=1)에서만 효과적
-// 다중 인스턴스 환경에서는 Redis/Firestore 기반 store 필요
-const tokenLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10분
-  max: 20, // 최대 20개 요청
+// Rate limiting for API calls
+const apiLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100, // Max 100 requests per 10 min
   message: { error: "Too many requests, please try again later." },
   standardHeaders: true,
   legacyHeaders: false,
-  // deviceId 기반 제한 (없으면 기본 IP 사용)
-  keyGenerator: (req) => req.body?.deviceId,
-  skip: (req) => !req.body?.deviceId, // deviceId 없으면 IP로 fallback
 });
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -24,113 +19,131 @@ if (!OPENAI_API_KEY) throw new Error("Missing OPENAI_API_KEY");
 
 const PORT = process.env.PORT || 8080;
 
-// Instructions 템플릿
-function generateInstructions(gameMode, currentWord, tabooWords) {
-  if (gameMode === "modeA") {
-    return `# Role
-You are the host of a speed quiz game. Your job is to describe words so the user can guess them.
+// Helper: Generate Mode A prompt (AI describes word)
+function generateModeAPrompt(word, taboo, previousHints = []) {
+  const tabooList = taboo.join(", ");
+  const hintsContext = previousHints.length > 0
+    ? `\n\nPrevious hints you gave:\n${previousHints.map((h, i) => `${i + 1}. ${h}`).join("\n")}`
+    : "";
 
-# Rules
+  return `You are the host of a speed quiz game. Describe the word "${word}" so the user can guess it.
+
+Rules:
 - NEVER say the target word, its spelling, or direct synonyms
+- NEVER use these taboo words: ${tabooList}
 - Use indirect, natural descriptions like "You use this when..." or "You usually see this in..."
-- Keep descriptions SHORT (1-2 sentences at a time)
-- If the user says something close, provide additional hints
-- If the user is correct, immediately stop and wait for the next word
-- The taboo words for the current word are: ${tabooWords?.join(", ") || "none"}
+- Keep descriptions SHORT (1-2 sentences)
+- Give helpful hints based on what you said before${hintsContext}
 
-# Current Word
-The word you need to describe is: ${currentWord}
-
-# Language
-- Speak only in English
-- Use clear, natural pronunciation`;
-  } else if (gameMode === "modeB") {
-    return `# Role
-You are a player in a speed quiz game trying to GUESS the word based on the user's description.
-
-# Rules
-- NEVER ask questions like "Is it...?" or "Does it...?"
-- ONLY make direct guesses in the format: "I think it is [WORD]" or simply "[WORD]"
-- Listen carefully to the user's description
-- Make educated guesses based on the clues
-- If you get "Close" feedback, try related words
-- If you get "Incorrect" feedback, try completely different words
-- Keep your guesses SHORT and CLEAR
-
-# Language
-- Listen in English
-- Respond only in English
-- Use clear, natural pronunciation`;
-  }
-  return "You are a helpful assistant.";
+Provide ONE additional hint in English.`;
 }
 
-app.post("/token", tokenLimiter, async (req, res) => {
+// Helper: Generate Mode B prompt (AI guesses based on user description)
+function generateModeBPrompt(transcript, category, previousGuesses = []) {
+  const guessesContext = previousGuesses.length > 0
+    ? `\n\nYour previous guesses (all were incorrect or close):\n${previousGuesses.join(", ")}`
+    : "";
+
+  return `You are a player in a speed quiz game. The user is describing a word from the "${category}" category.
+
+User's description so far:
+"${transcript}"${guessesContext}
+
+Rules:
+- NEVER ask questions like "Is it...?" or "Does it...?"
+- ONLY make ONE direct guess in the format: "I think it is [WORD]" or simply "[WORD]"
+- Make educated guesses based on the clues
+- Try a different word if your previous guesses were wrong
+
+Make your guess now in English (one word or short phrase only).`;
+}
+
+// Mode A: AI describes word
+app.post("/modeA/describe", apiLimiter, async (req, res) => {
   try {
-    const { deviceId, platform, appVersion, gameMode, currentWord, tabooWords } = req.body;
+    const { word, taboo, previousHints = [] } = req.body;
 
-    console.log(`[${new Date().toISOString()}] Token request - device: ${deviceId}, mode: ${gameMode}, word: ${currentWord}`);
+    if (!word || !Array.isArray(taboo)) {
+      return res.status(400).json({ error: "Missing required fields: word, taboo" });
+    }
 
-    // TODO: Rate limiting 구현 필요
-    // ⚠️ 주의: Cloud Run은 여러 인스턴스로 스케일되므로 인메모리 방식은 우회 가능
-    // 옵션 1 (MVP 간단): max-instances=1 설정 + 인메모리 (확장성 낮음)
-    // 옵션 2 (권장): Redis/Firestore 기반 분산 rate limiting
-    // await checkRateLimit(deviceId, req.ip);
+    console.log(`[${new Date().toISOString()}] Mode A describe - word: ${word}`);
 
-    // Session config - WebRTC 환경에서는 format 필드 생략 권장
-    const sessionConfig = {
-      session: {
-        type: "realtime",
-        model: "gpt-realtime",
-        instructions: generateInstructions(gameMode, currentWord, tabooWords),
-        audio: {
-          input: {
-            // ⚠️ format 필드 생략 - WebRTC SDP 협상에서 자동 결정됨
-            turn_detection: {
-              type: "semantic_vad",
-              // threshold: 0.5,  // 기본값, 필요시 조정
-              // silence_duration_ms: 200,
-              // prefix_padding_ms: 300,
-            },
-            transcription: {
-              model: "whisper-1",
-            },
-          },
-          output: {
-            // ⚠️ format 필드 생략 - WebRTC SDP 협상에서 자동 결정됨
-            voice: "marin",
-          },
-        },
+    const prompt = generateModeAPrompt(word, taboo, previousHints);
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
       },
-    };
-
-    const response = await fetch(
-      "https://api.openai.com/v1/realtime/client_secrets",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sessionConfig),
-      }
-    );
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 100,
+      }),
+    });
 
     if (!response.ok) {
       const errText = await response.text();
       console.error("OpenAI API error:", response.status, errText);
-      return res.status(response.status).json({
-        error: "client_secrets failed",
-        details: errText,
-      });
+      return res.status(response.status).json({ error: "OpenAI API failed", details: errText });
     }
 
     const data = await response.json();
-    console.log(`[${new Date().toISOString()}] Token issued - expires: ${data.expires_at}`);
+    const text = data.choices[0]?.message?.content || "";
 
-    res.json(data);
+    console.log(`[${new Date().toISOString()}] Mode A response: ${text.substring(0, 50)}...`);
+
+    res.json({ text });
   } catch (error) {
-    console.error("Token generation error:", error);
+    console.error("Mode A describe error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Mode B: AI guesses word
+app.post("/modeB/guess", apiLimiter, async (req, res) => {
+  try {
+    const { transcriptSoFar, category, previousGuesses = [] } = req.body;
+
+    if (!transcriptSoFar || !category) {
+      return res.status(400).json({ error: "Missing required fields: transcriptSoFar, category" });
+    }
+
+    console.log(`[${new Date().toISOString()}] Mode B guess - category: ${category}, transcript: ${transcriptSoFar.substring(0, 50)}...`);
+
+    const prompt = generateModeBPrompt(transcriptSoFar, category, previousGuesses);
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 50,
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("OpenAI API error:", response.status, errText);
+      return res.status(response.status).json({ error: "OpenAI API failed", details: errText });
+    }
+
+    const data = await response.json();
+    const guessText = data.choices[0]?.message?.content || "";
+
+    console.log(`[${new Date().toISOString()}] Mode B guess: ${guessText}`);
+
+    res.json({ guessText });
+  } catch (error) {
+    console.error("Mode B guess error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

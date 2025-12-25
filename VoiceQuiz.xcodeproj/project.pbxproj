@@ -22,6 +22,12 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Realtime_Archived/DataChannelManager.swift,
+				Realtime_Archived/README.md,
+				Realtime_Archived/RealtimeClient.swift,
+				Realtime_Archived/RealtimeEvents.swift,
+				Realtime_Archived/TestConnectionView.swift,
+				Realtime_Archived/WebRTCManager.swift,
 			);
 			target = 910BE7582EF3C09400AF6331 /* VoiceQuiz */;
 		};
