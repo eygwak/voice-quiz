@@ -2,18 +2,13 @@
 //  ScoreManager.swift
 //  VoiceQuiz
 //
-//  Score tracking and best score persistence
+//  Score calculation and tracking logic
 //
 
 import Foundation
 
 class ScoreManager {
     static let shared = ScoreManager()
-
-    private let userDefaults = UserDefaults.standard
-
-    private let bestScoreModeAKey = "bestScoreModeA"
-    private let bestScoreModeBKey = "bestScoreModeB"
 
     private init() {}
 
@@ -29,19 +24,17 @@ class ScoreManager {
         currentScore = 0
     }
 
-    // MARK: - Best Score
+    // MARK: - Best Score (delegates to UserDefaultsManager)
 
     func getBestScore(for mode: GameMode) -> Int {
-        let key = bestScoreKey(for: mode)
-        return userDefaults.integer(forKey: key)
+        return UserDefaultsManager.shared.getBestScore(for: mode)
     }
 
     func saveBestScore(_ score: Int, for mode: GameMode) {
-        let key = bestScoreKey(for: mode)
         let currentBest = getBestScore(for: mode)
 
         if score > currentBest {
-            userDefaults.set(score, forKey: key)
+            UserDefaultsManager.shared.saveBestScore(score, for: mode)
             print("🏆 New best score for \(mode.displayName): \(score)")
         }
     }
@@ -50,22 +43,9 @@ class ScoreManager {
         return score > getBestScore(for: mode)
     }
 
-    // MARK: - Helper
-
-    private func bestScoreKey(for mode: GameMode) -> String {
-        switch mode {
-        case .modeA:
-            return bestScoreModeAKey
-        case .modeB:
-            return bestScoreModeBKey
-        }
-    }
-
     // MARK: - Reset (for testing)
 
     func resetAllBestScores() {
-        userDefaults.removeObject(forKey: bestScoreModeAKey)
-        userDefaults.removeObject(forKey: bestScoreModeBKey)
-        print("🔄 All best scores reset")
+        UserDefaultsManager.shared.resetBestScores()
     }
 }
