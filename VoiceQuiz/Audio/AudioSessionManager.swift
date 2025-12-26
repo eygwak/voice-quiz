@@ -25,6 +25,7 @@ class AudioSessionManager {
     // MARK: - Permission
 
     func checkPermission() -> AVAudioSession.RecordPermission {
+        // Both APIs return the same enum type, but we keep using AVAudioSession for consistency
         return audioSession.recordPermission
     }
 
@@ -43,6 +44,8 @@ class AudioSessionManager {
 
         do {
             // Configure for voice chat
+            // Using .allowBluetooth for voice chat (deprecated but still functional)
+            // Alternative: .allowBluetoothA2DP (for music) is not suitable for voice
             try audioSession.setCategory(
                 .playAndRecord,
                 mode: .voiceChat,

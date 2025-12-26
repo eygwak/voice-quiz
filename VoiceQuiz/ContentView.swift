@@ -10,7 +10,7 @@ import AVFoundation
 import Speech
 
 struct ContentView: View {
-    @State private var microphonePermission: AVAudioApplication.RecordPermission = .undetermined
+    @State private var microphonePermission: AVAudioSession.RecordPermission = .undetermined
     @State private var speechRecognitionPermission: Bool = false
 
     var body: some View {
@@ -89,7 +89,9 @@ struct ContentView: View {
 
     private func checkPermissions() {
         // Check microphone permission
-        microphonePermission = AVAudioApplication.shared.recordPermission
+        // Note: We use AVAudioSession API for consistency across iOS 16+
+        // iOS 17 introduced AVAudioApplication, but AVAudioSession still works
+        microphonePermission = AVAudioSession.sharedInstance().recordPermission
 
         // Check speech recognition permission
         let authStatus = SFSpeechRecognizer.authorizationStatus()
@@ -98,7 +100,7 @@ struct ContentView: View {
 
     private func requestPermissions() {
         // Request microphone permission
-        AVAudioApplication.requestRecordPermission { granted in
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
             DispatchQueue.main.async {
                 self.microphonePermission = granted ? .granted : .denied
             }
