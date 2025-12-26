@@ -14,6 +14,7 @@ struct ResultView: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var showingConfetti = false
+    @State private var navigateToHome = false
 
     var body: some View {
         VStack(spacing: 30) {
@@ -94,12 +95,7 @@ struct ResultView: View {
 
                 // Home Button
                 Button {
-                    // Navigate to root (HomeView)
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let window = windowScene.windows.first,
-                       let rootViewController = window.rootViewController {
-                        rootViewController.dismiss(animated: true)
-                    }
+                    navigateToHome = true
                 } label: {
                     HStack {
                         Image(systemName: "house.fill")
@@ -116,6 +112,10 @@ struct ResultView: View {
             .padding(.bottom, 40)
         }
         .navigationBarBackButtonHidden(true)
+        .navigationDestination(isPresented: $navigateToHome) {
+            HomeView()
+                .navigationBarBackButtonHidden(true)
+        }
         .onAppear {
             showingConfetti = true
         }

@@ -80,10 +80,9 @@ class SpeechRecognizerService: NSObject, ObservableObject {
         partialTranscript = ""
         finalTranscript = ""
 
-        // Configure audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        // Don't reconfigure audio session - use existing configuration from AudioSessionManager
+        // The session is already configured as .playAndRecord with .voiceChat mode
+        // which allows both STT input and TTS output simultaneously
 
         // Create recognition request
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()

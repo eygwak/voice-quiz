@@ -74,6 +74,11 @@ class GameViewModel_ModeA: ObservableObject {
 
     func startGame() async {
         do {
+            // Configure and activate audio session
+            let audioManager = AudioSessionManager.shared
+            try audioManager.configure()
+            try audioManager.activate()
+
             // Load words
             try wordManager.loadWords(categoryId: gameState.category)
 
