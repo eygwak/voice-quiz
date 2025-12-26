@@ -60,10 +60,22 @@ class GameViewModel_ModeA: ObservableObject {
             }
             .store(in: &cancellables)
 
-        // Observe TTS state
+        // Observe TTS state and pause STT when AI is speaking
         tts.$isSpeaking
             .receive(on: DispatchQueue.main)
-            .assign(to: &$isTTSSpeaking)
+            .sink { [weak self] isSpeaking in
+                guard let self = self else { return }
+                self.isTTSSpeaking = isSpeaking
+
+                // Pause STT when TTS starts, resume when TTS stops
+                if isSpeaking {
+                    self.stt.stopListening()
+                } else if self.gamePhase == .playing {
+                    // Resume STT after TTS finishes
+                    try? self.stt.startListening()
+                }
+            }
+            .store(in: &cancellables)
 
         stt.$isListening
             .receive(on: DispatchQueue.main)
