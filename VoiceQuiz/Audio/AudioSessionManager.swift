@@ -25,14 +25,38 @@ class AudioSessionManager {
     // MARK: - Permission
 
     func checkPermission() -> AVAudioSession.RecordPermission {
-        // Both APIs return the same enum type, but we keep using AVAudioSession for consistency
-        return audioSession.recordPermission
+        if #available(iOS 17.0, *) {
+            // iOS 17+: Use AVAudioApplication API
+            // Convert AVAudioApplication.RecordPermission to AVAudioSession.RecordPermission
+            let appPermission = AVAudioApplication.shared.recordPermission
+            switch appPermission {
+            case .granted:
+                return .granted
+            case .denied:
+                return .denied
+            case .undetermined:
+                return .undetermined
+            @unknown default:
+                return .undetermined
+            }
+        } else {
+            // iOS 16: Use AVAudioSession API
+            return audioSession.recordPermission
+        }
     }
 
     func requestPermission() async -> Bool {
         return await withCheckedContinuation { continuation in
-            audioSession.requestRecordPermission { granted in
-                continuation.resume(returning: granted)
+            if #available(iOS 17.0, *) {
+                // iOS 17+: Use AVAudioApplication API
+                AVAudioApplication.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            } else {
+                // iOS 16: Use AVAudioSession API
+                audioSession.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
             }
         }
     }
@@ -44,12 +68,13 @@ class AudioSessionManager {
 
         do {
             // Configure for voice chat
-            // Using .allowBluetooth for voice chat (deprecated but still functional)
-            // Alternative: .allowBluetoothA2DP (for music) is not suitable for voice
+            // Using .voiceChat mode automatically enables Bluetooth HFP for voice
+            // We don't need .allowBluetooth (deprecated) - .voiceChat mode handles it
+            // .defaultToSpeaker routes audio to speaker instead of earpiece by default
             try audioSession.setCategory(
                 .playAndRecord,
                 mode: .voiceChat,
-                options: [.defaultToSpeaker, .allowBluetooth]
+                options: [.defaultToSpeaker]
             )
 
             // Prefer high quality audio

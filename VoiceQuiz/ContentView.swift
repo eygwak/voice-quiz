@@ -89,9 +89,23 @@ struct ContentView: View {
 
     private func checkPermissions() {
         // Check microphone permission
-        // Note: We use AVAudioSession API for consistency across iOS 16+
-        // iOS 17 introduced AVAudioApplication, but AVAudioSession still works
-        microphonePermission = AVAudioSession.sharedInstance().recordPermission
+        if #available(iOS 17.0, *) {
+            // iOS 17+: Use AVAudioApplication API
+            let appPermission = AVAudioApplication.shared.recordPermission
+            switch appPermission {
+            case .granted:
+                microphonePermission = .granted
+            case .denied:
+                microphonePermission = .denied
+            case .undetermined:
+                microphonePermission = .undetermined
+            @unknown default:
+                microphonePermission = .undetermined
+            }
+        } else {
+            // iOS 16: Use AVAudioSession API
+            microphonePermission = AVAudioSession.sharedInstance().recordPermission
+        }
 
         // Check speech recognition permission
         let authStatus = SFSpeechRecognizer.authorizationStatus()
@@ -100,9 +114,19 @@ struct ContentView: View {
 
     private func requestPermissions() {
         // Request microphone permission
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            DispatchQueue.main.async {
-                self.microphonePermission = granted ? .granted : .denied
+        if #available(iOS 17.0, *) {
+            // iOS 17+: Use AVAudioApplication API
+            AVAudioApplication.requestRecordPermission { granted in
+                DispatchQueue.main.async {
+                    self.microphonePermission = granted ? .granted : .denied
+                }
+            }
+        } else {
+            // iOS 16: Use AVAudioSession API
+            AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                DispatchQueue.main.async {
+                    self.microphonePermission = granted ? .granted : .denied
+                }
             }
         }
 
