@@ -45,14 +45,21 @@ struct ContentView: View {
                     }
                     .buttonStyle(.borderedProminent)
                 } else {
-                    Text("✅ Ready to Start")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.green)
-
-                    Text("Home screen coming in Phase 2-3")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    NavigationLink {
+                        HomeView()
+                    } label: {
+                        HStack {
+                            Image(systemName: "play.fill")
+                            Text("Start VoiceQuiz")
+                                .fontWeight(.semibold)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                    }
+                    .padding(.horizontal)
                 }
             }
             .padding()
