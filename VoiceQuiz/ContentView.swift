@@ -10,7 +10,7 @@ import AVFoundation
 import Speech
 
 struct ContentView: View {
-    @State private var microphonePermission: AVAudioSession.RecordPermission = .undetermined
+    @State private var microphonePermission: AVAudioApplication.RecordPermission = .undetermined
     @State private var speechRecognitionPermission: Bool = false
 
     var body: some View {
@@ -89,7 +89,7 @@ struct ContentView: View {
 
     private func checkPermissions() {
         // Check microphone permission
-        microphonePermission = AVAudioSession.sharedInstance().recordPermission
+        microphonePermission = AVAudioApplication.shared.recordPermission
 
         // Check speech recognition permission
         let authStatus = SFSpeechRecognizer.authorizationStatus()
@@ -98,7 +98,7 @@ struct ContentView: View {
 
     private func requestPermissions() {
         // Request microphone permission
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+        AVAudioApplication.requestRecordPermission { granted in
             DispatchQueue.main.async {
                 self.microphonePermission = granted ? .granted : .denied
             }
