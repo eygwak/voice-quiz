@@ -148,8 +148,8 @@ class GameViewModel_ModeB: ObservableObject {
         // Start STT listening
         try stt.startListening()
 
-        // Speak prompt
-        tts.speak(text: "Describe this word: \(word.word)")
+        // Don't speak - Mode B is text-only for now
+        print("📝 Mode B: Next word is \(word.word)")
     }
 
     func usePass() async {
@@ -220,8 +220,8 @@ class GameViewModel_ModeB: ObservableObject {
             previousGuesses.append(guess)
             aiGuess = guess
 
-            // Speak the guess
-            tts.speak(text: guess)
+            // Don't speak - Mode B is text-only for now
+            print("🤖 AI guessed: \(guess)")
 
         } catch {
             print("❌ Failed to get AI guess: \(error)")
@@ -238,28 +238,34 @@ class GameViewModel_ModeB: ObservableObject {
         gameState.incrementScore()
         score = gameState.score
 
-        // Speak feedback
-        tts.speak(text: "Yes! Moving to next word")
+        // No TTS feedback - text only
+        print("✅ Correct! Moving to next word")
 
         // Stop STT temporarily
         stt.stopListening()
 
-        // Wait for TTS, then load next word
-        try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+        // Wait briefly, then load next word
+        try? await Task.sleep(nanoseconds: 800_000_000) // 0.8 seconds
         try? await loadNextWord()
     }
 
     func judgeIncorrect() async {
-        // Give feedback
-        tts.speak(text: "Not quite, try another guess")
+        // No TTS feedback - text only
+        print("❌ Incorrect, try another guess")
+
+        // Clear AI guess to allow new guess
+        aiGuess = ""
 
         // Continue listening (STT keeps running)
         // AI will guess again after more description
     }
 
     func judgeClose() async {
-        // Give feedback
-        tts.speak(text: "Close, but not exactly")
+        // No TTS feedback - text only
+        print("⚠️ Close, but not exactly")
+
+        // Clear AI guess to allow new guess
+        aiGuess = ""
 
         // Continue listening
         // AI will try another guess
