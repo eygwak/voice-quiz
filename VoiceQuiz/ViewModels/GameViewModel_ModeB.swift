@@ -62,23 +62,10 @@ class GameViewModel_ModeB: ObservableObject {
             }
             .store(in: &cancellables)
 
-        // Observe TTS state and pause STT when AI is speaking (to prevent echo)
+        // Observe TTS state (no pause/resume logic needed in Mode B)
         tts.$isSpeaking
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isSpeaking in
-                guard let self = self else { return }
-                self.isTTSSpeaking = isSpeaking
-
-                // Pause STT when TTS starts, resume when TTS stops
-                if isSpeaking {
-                    self.stt.stopListening()
-                } else if self.gamePhase == .playing && !self.aiGuess.isEmpty {
-                    // Resume STT after AI speaks its guess
-                    // User continues describing after hearing AI's guess
-                    try? self.stt.startListening()
-                }
-            }
-            .store(in: &cancellables)
+            .assign(to: &$isTTSSpeaking)
 
         stt.$isListening
             .receive(on: DispatchQueue.main)
