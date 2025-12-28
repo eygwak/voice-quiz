@@ -313,12 +313,16 @@ class GameViewModel_ModeA: ObservableObject {
 
     // MARK: - Cleanup
 
-    nonisolated deinit {
-        Task { @MainActor in
-            stopTimer()
-            tts.stop()
-            stt.stopListening()
-            cancellables.removeAll()
-        }
+    func cleanup() {
+        stopTimer()
+        tts.stop()
+        stt.stopListening()
+        autoJudgeTask?.cancel()
+        finalTranscriptTimeoutTask?.cancel()
+        cancellables.removeAll()
+    }
+
+    deinit {
+        print("🗑️ GameViewModel_ModeA deallocating")
     }
 }

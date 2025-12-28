@@ -57,6 +57,7 @@ struct GameView_ModeB: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     viewModel.endGame()
+                    viewModel.cleanup()
                     dismiss()
                 } label: {
                     HStack {
@@ -68,6 +69,9 @@ struct GameView_ModeB: View {
         }
         .task {
             await viewModel.startGame()
+        }
+        .onDisappear {
+            viewModel.cleanup()
         }
         .onChange(of: viewModel.gamePhase) { newPhase in
             if newPhase == .finished {
