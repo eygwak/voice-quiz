@@ -26,6 +26,7 @@ class GameViewModel_ModeA: ObservableObject {
     @Published private(set) var isTTSSpeaking: Bool = false
     @Published private(set) var isSTTListening: Bool = false
     @Published private(set) var isLoadingHint: Bool = false
+    @Published private(set) var isGuessButtonPressed: Bool = false
 
     // MARK: - Services
 
@@ -41,6 +42,8 @@ class GameViewModel_ModeA: ObservableObject {
     private var timer: Timer?
     private var previousHints: [String] = []
     private var cancellables = Set<AnyCancellable>()
+    private var autoJudgeTask: Task<Void, Never>?
+    private var finalTranscriptTimeoutTask: Task<Void, Never>?
 
     // MARK: - Initialization
 
@@ -52,30 +55,10 @@ class GameViewModel_ModeA: ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: &$userTranscript)
 
-        stt.$finalTranscript
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] transcript in
-                guard let self = self, !transcript.isEmpty else { return }
-                Task { await self.handleUserAnswer(transcript) }
-            }
-            .store(in: &cancellables)
-
-        // Observe TTS state and pause STT when AI is speaking
+        // Observe TTS state
         tts.$isSpeaking
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isSpeaking in
-                guard let self = self else { return }
-                self.isTTSSpeaking = isSpeaking
-
-                // Pause STT when TTS starts, resume when TTS stops
-                if isSpeaking {
-                    self.stt.stopListening()
-                } else if self.gamePhase == .playing {
-                    // Resume STT after TTS finishes
-                    try? self.stt.startListening()
-                }
-            }
-            .store(in: &cancellables)
+            .assign(to: &$isTTSSpeaking)
 
         stt.$isListening
             .receive(on: DispatchQueue.main)
@@ -156,8 +139,7 @@ class GameViewModel_ModeA: ObservableObject {
         // Request AI description
         await requestAIDescription()
 
-        // Start STT listening
-        try stt.startListening()
+        // Don't start STT here - it's push-to-talk mode (Guess button controls STT)
     }
 
     func usePass() async {
@@ -171,6 +153,64 @@ class GameViewModel_ModeA: ObservableObject {
 
         // Move to next word
         try? await loadNextWord()
+    }
+
+    // MARK: - Guess Button (Push-to-Talk)
+
+    func onGuessButtonPressed() {
+        guard gamePhase == .playing else { return }
+
+        isGuessButtonPressed = true
+
+        // Pause TTS (not stop, so we can resume later)
+        if tts.isSpeaking {
+            tts.pause()
+        }
+
+        // Start STT
+        userTranscript = ""
+        do {
+            try stt.startListening()
+        } catch {
+            print("❌ Failed to start STT: \(error)")
+        }
+
+        // Auto-judge after 2 seconds (for tap)
+        autoJudgeTask?.cancel()
+        autoJudgeTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            guard let self = self, !Task.isCancelled else { return }
+            await self.onGuessButtonReleased()
+        }
+    }
+
+    func onGuessButtonReleased() async {
+        guard isGuessButtonPressed else { return }
+
+        isGuessButtonPressed = false
+        autoJudgeTask?.cancel()
+
+        // Stop STT
+        stt.stopListening()
+
+        // Wait for final transcript with 0.5s timeout
+        finalTranscriptTimeoutTask?.cancel()
+        finalTranscriptTimeoutTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            guard let self = self, !Task.isCancelled else { return }
+
+            // If no final transcript, use last partial
+            let transcript = self.stt.finalTranscript.isEmpty ? self.stt.partialTranscript : self.stt.finalTranscript
+
+            if !transcript.isEmpty {
+                await self.handleUserAnswer(transcript, allowResume: true)
+            } else {
+                // No speech detected, resume TTS
+                if self.gamePhase == .playing {
+                    self.tts.resume()
+                }
+            }
+        }
     }
 
     // MARK: - AI Description
@@ -203,12 +243,9 @@ class GameViewModel_ModeA: ObservableObject {
 
     // MARK: - User Answer Handling
 
-    private func handleUserAnswer(_ answer: String) async {
+    private func handleUserAnswer(_ answer: String, allowResume: Bool = false) async {
         guard let word = currentWord else { return }
         guard gamePhase == .playing else { return }
-
-        // Stop TTS immediately when user speaks
-        tts.stop()
 
         // Judge the answer
         let result = answerJudge.judge(userAnswer: answer, correctWord: word)
@@ -216,32 +253,36 @@ class GameViewModel_ModeA: ObservableObject {
 
         switch result {
         case .correct:
+            // Stop TTS
+            tts.stop()
+
             // Increment score
             gameState.incrementScore()
             score = gameState.score
 
-            // Speak feedback
-            tts.speak(text: "Correct! The answer was \(word.word)")
+            // Show visual feedback (no TTS)
+            // TODO: Add sound effect
 
-            // Wait for TTS to finish, then load next word
-            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            // Wait briefly to show feedback, then load next word
+            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+            judgmentResult = nil
             try? await loadNextWord()
 
-        case .close:
-            // Give feedback
-            tts.speak(text: "Close! Try again")
+        case .close, .incorrect:
+            // Show visual feedback (no TTS)
+            // TODO: Add sound effect
 
-            // Wait, then give another hint
-            try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
-            await requestAIDescription()
+            // Wait briefly to show feedback
+            try? await Task.sleep(nanoseconds: 800_000_000) // 0.8 seconds
+            judgmentResult = nil
 
-        case .incorrect:
-            // Give feedback
-            tts.speak(text: "Not quite")
-
-            // Wait, then give another hint
-            try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
-            await requestAIDescription()
+            // Resume TTS if it was paused (from Guess button)
+            if allowResume && !tts.isSpeaking {
+                tts.resume()
+            } else {
+                // Continue with new hint
+                await requestAIDescription()
+            }
         }
     }
 

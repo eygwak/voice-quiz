@@ -152,9 +152,12 @@
 
 ## 5. 전사/자막/정답 판정
 
-### 5.1 전사
-- Realtime 전사만 사용
-- 자막 UI는 delta 업데이트를 스트리밍 표시(가능하면)
+### 5.1 전사(MVP: iOS 내장 STT)
+- **Apple Speech Framework**로 전사
+- 자막 UI는 **partial transcript(중간 결과)** 를 스트리밍 표시
+- 정답 판정은 **final transcript(확정 결과)** 기준으로 로컬 판정
+- TTS 재생 중에는 기본적으로 STT를 **일시 중지**(자기 음성 유입 방지)
+"- (옵션) 이어폰/블루투스 사용 시에만 동시 STT/TTS 허용(실험)
 
 ### 5.2 로컬 판정 (Mode A 중심)
 - normalize(소문자/구두점/공백)

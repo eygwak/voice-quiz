@@ -156,9 +156,9 @@ struct GameView_ModeA: View {
             }
             .padding(.horizontal)
 
-            // Judgment Result
+            // Judgment Result (Large O/X)
             if let result = viewModel.judgmentResult {
-                JudgmentBadge(result: result)
+                JudgmentSymbol(result: result)
                     .transition(.scale.combined(with: .opacity))
             }
         }
@@ -203,50 +203,44 @@ struct GameView_ModeA: View {
                     .background(Circle().fill(Color.gray.opacity(0.2)))
             }
 
-            // Pass Button
-            Button {
-                Task {
-                    await viewModel.usePass()
+            // Guess Button (Push-to-Talk)
+            GuessButton(
+                isPressed: viewModel.isGuessButtonPressed,
+                isListening: viewModel.isSTTListening,
+                onPressDown: {
+                    viewModel.onGuessButtonPressed()
+                },
+                onPressUp: {
+                    Task {
+                        await viewModel.onGuessButtonReleased()
+                    }
                 }
-            } label: {
-                VStack(spacing: 4) {
-                    Image(systemName: "forward.fill")
-                        .font(.title2)
-                    Text("Pass")
-                        .font(.caption)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 60)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(viewModel.remainingPasses > 0 ? Color.blue : Color.gray.opacity(0.2))
-                )
-                .foregroundColor(.white)
-            }
-            .disabled(viewModel.remainingPasses == 0)
+            )
         }
     }
 }
 
-// MARK: - Judgment Badge
+// MARK: - Judgment Symbol (O/X)
 
-struct JudgmentBadge: View {
+struct JudgmentSymbol: View {
     let result: JudgmentResult
 
     var body: some View {
-        Text(result.feedback)
-            .font(.title2)
-            .fontWeight(.bold)
-            .foregroundStyle(.white)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 12)
-            .background(
-                Capsule()
-                    .fill(backgroundColor)
-            )
+        Text(symbolText)
+            .font(.system(size: 120, weight: .bold))
+            .foregroundStyle(symbolColor)
     }
 
-    private var backgroundColor: Color {
+    private var symbolText: String {
+        switch result {
+        case .correct:
+            return "O"
+        case .close, .incorrect:
+            return "X"
+        }
+    }
+
+    private var symbolColor: Color {
         switch result {
         case .correct:
             return .green
@@ -255,6 +249,46 @@ struct JudgmentBadge: View {
         case .incorrect:
             return .red
         }
+    }
+}
+
+// MARK: - Guess Button (Push-to-Talk)
+
+struct GuessButton: View {
+    let isPressed: Bool
+    let isListening: Bool
+    let onPressDown: () -> Void
+    let onPressUp: () -> Void
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Image(systemName: isListening ? "waveform" : "mic.fill")
+                .font(.title)
+            Text(isPressed ? "Listening..." : "Guess")
+                .font(.caption)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 60)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(isPressed ? Color.red : Color.blue)
+        )
+        .foregroundColor(.white)
+        .scaleEffect(isPressed ? 0.95 : 1.0)
+        .animation(.easeInOut(duration: 0.1), value: isPressed)
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    if !isPressed {
+                        onPressDown()
+                    }
+                }
+                .onEnded { _ in
+                    if isPressed {
+                        onPressUp()
+                    }
+                }
+        )
     }
 }
 
