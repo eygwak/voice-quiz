@@ -99,8 +99,25 @@ class SpeechRecognizerService: NSObject, ObservableObject {
         let recordingFormat = inputNode.outputFormat(forBus: 0)
 
         // Install tap on input node
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
             recognitionRequest.append(buffer)
+
+            // Check audio level to verify microphone input
+            let channelData = buffer.floatChannelData?[0]
+            let channelDataCount = Int(buffer.frameLength)
+
+            if let channelData = channelData, channelDataCount > 0 {
+                var sum: Float = 0
+                for i in 0..<channelDataCount {
+                    sum += abs(channelData[i])
+                }
+                let avgPower = sum / Float(channelDataCount)
+
+                // Log audio level every ~1 second (assuming 44.1kHz / 1024 ≈ 43 buffers per second)
+                if Int.random(in: 0..<43) == 0 {
+                    print("🎙️ Audio input level: \(String(format: "%.4f", avgPower)) (should be > 0.001 when speaking)")
+                }
+            }
         }
 
         // Prepare and start audio engine
