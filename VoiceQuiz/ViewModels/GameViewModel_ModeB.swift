@@ -52,12 +52,25 @@ class GameViewModel_ModeB: ObservableObject {
         // Observe STT transcripts
         stt.$partialTranscript
             .receive(on: DispatchQueue.main)
-            .assign(to: &$userTranscript)
+            .sink { [weak self] transcript in
+                guard let self = self else { return }
+                self.userTranscript = transcript
+                if !transcript.isEmpty {
+                    print("📝 Mode B partial transcript: \(transcript)")
+                }
+
+                // Trigger AI guess when partial transcript is long enough
+                if transcript.count > 15 {
+                    self.debouncedRequestAIGuess(with: transcript)
+                }
+            }
+            .store(in: &cancellables)
 
         stt.$finalTranscript
             .receive(on: DispatchQueue.main)
             .sink { [weak self] transcript in
                 guard let self = self, !transcript.isEmpty else { return }
+                print("📝 Mode B final transcript: \(transcript)")
                 self.handleUserDescription(transcript)
             }
             .store(in: &cancellables)
@@ -195,6 +208,37 @@ class GameViewModel_ModeB: ObservableObject {
 
     // MARK: - AI Guess
 
+    private func debouncedRequestAIGuess(with transcript: String) {
+        // Update accumulated transcript with partial transcript
+        accumulatedTranscript = transcript
+
+        // Check if already loading a guess
+        guard !isLoadingGuess else { return }
+
+        // Check time since last guess
+        let now = Date()
+        if let lastGuess = lastGuessTime {
+            let elapsed = now.timeIntervalSince(lastGuess)
+
+            // If less than min interval, wait
+            if elapsed < minGuessInterval {
+                return
+            }
+
+            // If more than max interval, force a guess
+            if elapsed > maxGuessInterval {
+                Task { await requestAIGuess() }
+                return
+            }
+        }
+
+        // Check if we have enough description to make a guess
+        let wordCount = transcript.components(separatedBy: .whitespaces).count
+        if wordCount >= 5 || (lastGuessTime == nil && wordCount >= 3) {
+            Task { await requestAIGuess() }
+        }
+    }
+
     private func requestAIGuess() async {
         guard !accumulatedTranscript.isEmpty else { return }
         guard !isLoadingGuess else { return }
@@ -209,6 +253,10 @@ class GameViewModel_ModeB: ObservableObject {
 
         isLoadingGuess = true
         lastGuessTime = Date()
+
+        // Log the transcript being sent to server
+        print("📤 Sending to server - Transcript: \"\(accumulatedTranscript)\"")
+        print("📤 Category: \(wordManager.categoryName), Previous guesses: \(previousGuesses)")
 
         do {
             let guess = try await apiClient.requestGuess(

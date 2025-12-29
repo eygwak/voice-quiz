@@ -265,34 +265,46 @@ struct GuessButton: View {
     let onPressUp: () -> Void
 
     var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: isListening ? "waveform" : "mic.fill")
-                .font(.title)
-            Text(isPressed ? "Listening..." : "Guess")
-                .font(.caption)
+        Button(action: {
+            // Action is handled by gesture
+        }) {
+            VStack(spacing: 4) {
+                Image(systemName: isListening ? "waveform" : "mic.fill")
+                    .font(.title)
+                Text(isPressed ? "Listening..." : "Guess")
+                    .font(.caption)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 60)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isPressed ? Color.red : Color.blue)
+            )
+            .foregroundColor(.white)
+            .scaleEffect(isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: isPressed)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 60)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isPressed ? Color.red : Color.blue)
-        )
-        .foregroundColor(.white)
-        .scaleEffect(isPressed ? 0.95 : 1.0)
-        .animation(.easeInOut(duration: 0.1), value: isPressed)
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    if !isPressed {
-                        onPressDown()
-                    }
+        .buttonStyle(PressButtonStyle(
+            onPressDown: onPressDown,
+            onPressUp: onPressUp
+        ))
+    }
+}
+
+// Custom ButtonStyle for press/release detection
+struct PressButtonStyle: ButtonStyle {
+    let onPressDown: () -> Void
+    let onPressUp: () -> Void
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .onChange(of: configuration.isPressed) { isPressed in
+                if isPressed {
+                    onPressDown()
+                } else {
+                    onPressUp()
                 }
-                .onEnded { _ in
-                    if isPressed {
-                        onPressUp()
-                    }
-                }
-        )
+            }
     }
 }
 

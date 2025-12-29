@@ -113,9 +113,9 @@ class SpeechRecognizerService: NSObject, ObservableObject {
                 }
                 let avgPower = sum / Float(channelDataCount)
 
-                // Log audio level every ~1 second (assuming 44.1kHz / 1024 ≈ 43 buffers per second)
-                if Int.random(in: 0..<43) == 0 {
-                    print("🎙️ Audio input level: \(String(format: "%.4f", avgPower)) (should be > 0.001 when speaking)")
+                // Log audio level every ~0.5 seconds when there's actual sound
+                if Int.random(in: 0..<21) == 0 && avgPower > 0.0005 {
+                    print("🎙️ Audio input level: \(String(format: "%.4f", avgPower))")
                 }
             }
         }
