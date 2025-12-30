@@ -42,7 +42,6 @@ class GameViewModel_ModeA: ObservableObject {
     private var timer: Timer?
     private var previousHints: [String] = []
     private var cancellables = Set<AnyCancellable>()
-    private var autoJudgeTask: Task<Void, Never>?
     private var finalTranscriptTimeoutTask: Task<Void, Never>?
 
     // MARK: - Initialization
@@ -174,21 +173,12 @@ class GameViewModel_ModeA: ObservableObject {
         } catch {
             print("❌ Failed to start STT: \(error)")
         }
-
-        // Auto-judge after 2 seconds (for tap)
-        autoJudgeTask?.cancel()
-        autoJudgeTask = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-            guard let self = self, !Task.isCancelled else { return }
-            await self.onGuessButtonReleased()
-        }
     }
 
     func onGuessButtonReleased() async {
         guard isGuessButtonPressed else { return }
 
         isGuessButtonPressed = false
-        autoJudgeTask?.cancel()
 
         // Stop STT
         stt.stopListening()
@@ -317,7 +307,6 @@ class GameViewModel_ModeA: ObservableObject {
         stopTimer()
         tts.stop()
         stt.stopListening()
-        autoJudgeTask?.cancel()
         finalTranscriptTimeoutTask?.cancel()
         cancellables.removeAll()
     }

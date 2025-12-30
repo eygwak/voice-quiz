@@ -192,34 +192,63 @@ struct GameView_ModeA: View {
     // MARK: - Controls
 
     private var controlsView: some View {
-        HStack(spacing: 16) {
-            // Pause Button
-            Button {
-                if viewModel.gamePhase == .playing {
-                    viewModel.pauseGame()
-                } else if viewModel.gamePhase == .paused {
-                    viewModel.resumeGame()
+        VStack(spacing: 12) {
+            // Main control buttons (Pause + Guess)
+            HStack(spacing: 16) {
+                // Pause Button
+                Button {
+                    if viewModel.gamePhase == .playing {
+                        viewModel.pauseGame()
+                    } else if viewModel.gamePhase == .paused {
+                        viewModel.resumeGame()
+                    }
+                } label: {
+                    Image(systemName: viewModel.gamePhase == .playing ? "pause.fill" : "play.fill")
+                        .font(.title2)
+                        .frame(width: 60, height: 60)
+                        .background(Circle().fill(Color.gray.opacity(0.2)))
                 }
-            } label: {
-                Image(systemName: viewModel.gamePhase == .playing ? "pause.fill" : "play.fill")
-                    .font(.title2)
-                    .frame(width: 60, height: 60)
-                    .background(Circle().fill(Color.gray.opacity(0.2)))
+
+                // Guess Button (Push-to-Talk)
+                GuessButton(
+                    isPressed: viewModel.isGuessButtonPressed,
+                    isListening: viewModel.isSTTListening,
+                    onPressDown: {
+                        viewModel.onGuessButtonPressed()
+                    },
+                    onPressUp: {
+                        Task {
+                            await viewModel.onGuessButtonReleased()
+                        }
+                    }
+                )
             }
 
-            // Guess Button (Push-to-Talk)
-            GuessButton(
-                isPressed: viewModel.isGuessButtonPressed,
-                isListening: viewModel.isSTTListening,
-                onPressDown: {
-                    viewModel.onGuessButtonPressed()
-                },
-                onPressUp: {
-                    Task {
-                        await viewModel.onGuessButtonReleased()
-                    }
+            // Pass Button
+            Button {
+                Task {
+                    await viewModel.usePass()
                 }
-            )
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "forward.fill")
+                        .font(.headline)
+                    Text("Pass (\(viewModel.remainingPasses))")
+                        .font(.headline)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(viewModel.remainingPasses > 0 ? Color.blue.opacity(0.1) : Color.gray.opacity(0.1))
+                )
+                .foregroundColor(viewModel.remainingPasses > 0 ? .blue : .gray)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(viewModel.remainingPasses > 0 ? Color.blue : Color.gray, lineWidth: 1.5)
+                )
+            }
+            .disabled(viewModel.remainingPasses == 0)
         }
     }
 }
