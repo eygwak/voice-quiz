@@ -22,6 +22,7 @@ class GameViewModel_ModeB: ObservableObject {
     @Published private(set) var userTranscript: String = ""
     @Published private(set) var accumulatedTranscript: String = ""
     @Published private(set) var aiGuess: String = ""
+    @Published private(set) var penaltyMessage: String = "" // "Oops! You said it!"
 
     @Published private(set) var isTTSSpeaking: Bool = false
     @Published private(set) var isSTTListening: Bool = false
@@ -31,6 +32,7 @@ class GameViewModel_ModeB: ObservableObject {
 
     private let wordManager = WordManager()
     private let gameState: GameSessionState
+    private let answerJudge = AnswerJudge()
     private let apiClient = APIClient.shared
     private let tts = SpeechSynthesizerService.shared
     private let stt = SpeechRecognizerService.shared
@@ -57,6 +59,21 @@ class GameViewModel_ModeB: ObservableObject {
                 self.userTranscript = transcript
                 if !transcript.isEmpty {
                     print("📝 Mode B partial transcript: \(transcript)")
+                }
+
+                // Check if user said the answer word (penalty)
+                if let currentWord = self.currentWord, !transcript.isEmpty {
+                    let result = self.answerJudge.judge(
+                        userAnswer: transcript,
+                        correctWord: currentWord
+                    )
+
+                    if result == .correct {
+                        // User said the answer! Penalty - no points, skip to next word
+                        print("⚠️ PENALTY: User said the answer word!")
+                        self.handlePenalty()
+                        return
+                    }
                 }
 
                 // Trigger AI guess when partial transcript is long enough
@@ -156,6 +173,7 @@ class GameViewModel_ModeB: ObservableObject {
         userTranscript = ""
         accumulatedTranscript = ""
         aiGuess = ""
+        penaltyMessage = ""
         lastGuessTime = nil
 
         // Start STT listening
@@ -176,6 +194,24 @@ class GameViewModel_ModeB: ObservableObject {
 
         // Move to next word
         try? await loadNextWord()
+    }
+
+    private func handlePenalty() {
+        // Show penalty message
+        penaltyMessage = "Oops! You said it!"
+
+        // Stop STT temporarily
+        stt.stopListening()
+
+        // Don't increment score - this is a penalty
+
+        // Move to next word after brief delay
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+            guard let self = self else { return }
+            self.penaltyMessage = ""
+            try? await self.loadNextWord()
+        }
     }
 
     // MARK: - User Description Handling

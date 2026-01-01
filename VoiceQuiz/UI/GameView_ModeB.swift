@@ -177,6 +177,22 @@ struct GameView_ModeB: View {
             )
             .padding(.horizontal)
 
+            // Penalty Message
+            if !viewModel.penaltyMessage.isEmpty {
+                Text(viewModel.penaltyMessage)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.red)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.red.opacity(0.1))
+                    )
+                    .padding(.horizontal)
+                    .transition(.scale.combined(with: .opacity))
+            }
+
             // AI's Guess
             if !viewModel.aiGuess.isEmpty {
                 VStack(spacing: 12) {
