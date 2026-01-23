@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import AVFoundation
 
 @MainActor
 class GameViewModel_ModeB: ObservableObject {
@@ -22,7 +23,9 @@ class GameViewModel_ModeB: ObservableObject {
     @Published private(set) var userTranscript: String = ""
     @Published private(set) var accumulatedTranscript: String = ""
     @Published private(set) var aiGuess: String = ""
+    @Published private(set) var aiGuessHistory: [String] = [] // Recent 5 guesses, newest first
     @Published private(set) var penaltyMessage: String = "" // "Oops! You said it!"
+    @Published private(set) var showCorrectFeedback: Bool = false // Show success animation
 
     @Published private(set) var isTTSSpeaking: Bool = false
     @Published private(set) var isSTTListening: Bool = false
@@ -33,6 +36,13 @@ class GameViewModel_ModeB: ObservableObject {
     private let wordManager = WordManager()
     private let gameState: GameSessionState
     private let answerJudge = AnswerJudge()
+
+    // MARK: - Computed Properties
+
+    var completedGameSession: GameSession? {
+        guard gamePhase == .finished else { return nil }
+        return gameState.toGameSession(categoryName: wordManager.categoryName)
+    }
     private let apiClient = APIClient.shared
     private let tts = SpeechSynthesizerService.shared
     private let stt = SpeechRecognizerService.shared
@@ -43,13 +53,27 @@ class GameViewModel_ModeB: ObservableObject {
     private var previousGuesses: [String] = []
     private var cancellables = Set<AnyCancellable>()
     private var lastGuessTime: Date?
-    private let minGuessInterval: TimeInterval = 1.5
-    private let maxGuessInterval: TimeInterval = 3.0
+    private var wordStartTime: Date?
+    private let firstGuessDelay: TimeInterval = 3.0 // First guess after 3 seconds
+    private var lastTranscriptLength: Int = 0
+    private var wordCountAtLastGuess: Int = 0
+    private var lastSpeechTime: Date?
+    private var silenceCheckTimer: Timer?
 
     // MARK: - Initialization
 
     init(categoryId: String) {
         self.gameState = GameSessionState(mode: .modeB, category: categoryId)
+
+        // Observe STT listening state
+        stt.$isListening
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isListening in
+                guard let self = self else { return }
+                self.isSTTListening = isListening
+                print("🎙️ [ModeB] STT listening state changed: \(isListening)")
+            }
+            .store(in: &cancellables)
 
         // Observe STT transcripts
         stt.$partialTranscript
@@ -58,7 +82,7 @@ class GameViewModel_ModeB: ObservableObject {
                 guard let self = self else { return }
                 self.userTranscript = transcript
                 if !transcript.isEmpty {
-                    print("📝 Mode B partial transcript: \(transcript)")
+                    print("📝 [ModeB] Partial transcript: \(transcript)")
                 }
 
                 // Check if user said the answer word (penalty)
@@ -76,19 +100,30 @@ class GameViewModel_ModeB: ObservableObject {
                     }
                 }
 
-                // Trigger AI guess when partial transcript is long enough
-                if transcript.count > 15 {
-                    self.debouncedRequestAIGuess(with: transcript)
-                }
-            }
-            .store(in: &cancellables)
+                // Track transcript length for silence detection
+                let wordCount = transcript.components(separatedBy: .whitespaces).filter { !$0.isEmpty }.count
 
-        stt.$finalTranscript
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] transcript in
-                guard let self = self, !transcript.isEmpty else { return }
-                print("📝 Mode B final transcript: \(transcript)")
-                self.handleUserDescription(transcript)
+                // If transcript changed, user is speaking
+                if wordCount != self.lastTranscriptLength {
+                    self.lastTranscriptLength = wordCount
+                    self.lastSpeechTime = Date()
+
+                    // Update accumulated transcript with latest partial
+                    self.accumulatedTranscript = transcript
+
+                    self.startSilenceDetection()
+
+                    // Check word count trigger (even without silence)
+                    if let lastGuess = self.lastGuessTime, !self.isLoadingGuess {
+                        let newWordCount = wordCount - self.wordCountAtLastGuess
+
+                        // Trigger on 7+ words
+                        if newWordCount >= 7 {
+                            print("🎯 7+ word-triggered guess (continuous speech) with \(newWordCount) new words")
+                            Task { await self.requestAIGuess() }
+                        }
+                    }
+                }
             }
             .store(in: &cancellables)
 
@@ -112,50 +147,71 @@ class GameViewModel_ModeB: ObservableObject {
             try audioManager.activate()
 
             // Load words
+            print("🎮 [ModeB] Loading words...")
             try wordManager.loadWords(categoryId: gameState.category)
 
             // Start game state
+            print("🎮 [ModeB] Starting game state...")
             gameState.start()
             gamePhase = .playing
 
             // Start timer
+            print("🎮 [ModeB] Starting timer...")
             startTimer()
 
             // Get first word
+            print("🎮 [ModeB] Loading first word...")
             try await loadNextWord()
 
         } catch {
-            print("❌ Failed to start game: \(error)")
+            print("❌ [ModeB] Failed to start game: \(error)")
         }
     }
 
     func pauseGame() {
+        print("⏸️ [ModeB] Pausing game...")
         gameState.pause()
         gamePhase = .paused
         stopTimer()
         tts.stop()
         stt.stopListening()
+        print("✅ [ModeB] Game paused")
     }
 
     func resumeGame() {
+        print("▶️ [ModeB] Resuming game...")
         gameState.resume()
         gamePhase = .playing
         startTimer()
 
         // Resume STT
         do {
+            print("🎙️ [ModeB] Attempting to restart STT...")
             try stt.startListening()
+            print("✅ [ModeB] Game resumed successfully")
         } catch {
-            print("❌ Failed to resume STT: \(error)")
+            print("❌ [ModeB] Failed to resume STT: \(error)")
         }
     }
 
     func endGame() {
+        // Save any remaining transcript before finishing
+        if !accumulatedTranscript.isEmpty {
+            gameState.appendToTranscript(accumulatedTranscript)
+            print("💾 Saved final transcript on game end: \(accumulatedTranscript)")
+        }
+
         gameState.finish()
         gamePhase = .finished
         stopTimer()
         tts.stop()
         stt.stopListening()
+
+        // Save game session to history
+        if let session = completedGameSession {
+            GameHistoryStorage.shared.saveSession(session)
+            print("💾 Game session saved to history with full transcript: \(session.fullTranscript)")
+        }
     }
 
     // MARK: - Word Management
@@ -173,18 +229,44 @@ class GameViewModel_ModeB: ObservableObject {
         userTranscript = ""
         accumulatedTranscript = ""
         aiGuess = ""
+        aiGuessHistory = []
         penaltyMessage = ""
+        showCorrectFeedback = false
         lastGuessTime = nil
+        wordStartTime = Date()
+        lastTranscriptLength = 0
+        wordCountAtLastGuess = 0
+        lastSpeechTime = nil
 
         // Start STT listening
+        print("🎙️ [ModeB] Starting STT for word: \(word.word)")
         try stt.startListening()
 
         // Don't speak - Mode B is text-only for now
-        print("📝 Mode B: Next word is \(word.word)")
+        print("📝 [ModeB] Next word loaded: \(word.word)")
     }
 
     func usePass() async {
         guard gameState.canPass() else { return }
+
+        // Save current transcript to game state before passing
+        if !accumulatedTranscript.isEmpty {
+            gameState.appendToTranscript(accumulatedTranscript)
+            print("💾 Saved transcript on pass: \(accumulatedTranscript)")
+        }
+
+        // Record word result before passing
+        if let word = currentWord {
+            let wordResult = WordResult(
+                word: word.word,
+                attempts: previousGuesses.count,
+                passed: true,
+                isCorrect: false,
+                aiTranscript: aiGuess.isEmpty ? nil : aiGuess,
+                judgment: "passed"
+            )
+            gameState.recordWordResult(wordResult)
+        }
 
         gameState.usePass()
         remainingPasses = gameState.remainingPasses
@@ -197,6 +279,25 @@ class GameViewModel_ModeB: ObservableObject {
     }
 
     private func handlePenalty() {
+        // Save current transcript to game state before penalty
+        if !accumulatedTranscript.isEmpty {
+            gameState.appendToTranscript(accumulatedTranscript)
+            print("💾 Saved transcript on penalty: \(accumulatedTranscript)")
+        }
+
+        // Record word result before penalty
+        if let word = currentWord {
+            let wordResult = WordResult(
+                word: word.word,
+                attempts: 0,
+                passed: false,
+                isCorrect: false,
+                aiTranscript: nil,
+                judgment: "penalty"
+            )
+            gameState.recordWordResult(wordResult)
+        }
+
         // Show penalty message
         penaltyMessage = "Oops! You said it!"
 
@@ -214,64 +315,117 @@ class GameViewModel_ModeB: ObservableObject {
         }
     }
 
-    // MARK: - User Description Handling
-
-    private func handleUserDescription(_ newText: String) {
-        // Accumulate transcript
+    private func handleAICorrectGuess() async {
+        // Save current transcript to game state before moving to next word
         if !accumulatedTranscript.isEmpty {
-            accumulatedTranscript += " " + newText
-        } else {
-            accumulatedTranscript = newText
+            gameState.appendToTranscript(accumulatedTranscript)
+            print("💾 Saved transcript on correct: \(accumulatedTranscript)")
         }
 
-        // Check if enough time passed since last guess
-        let now = Date()
-        if let lastGuess = lastGuessTime {
-            let elapsed = now.timeIntervalSince(lastGuess)
-            if elapsed < minGuessInterval {
-                // Too soon, wait
-                return
+        // Record word result
+        if let word = currentWord {
+            let wordResult = WordResult(
+                word: word.word,
+                attempts: previousGuesses.count,
+                passed: false,
+                isCorrect: true,
+                aiTranscript: aiGuess,
+                judgment: "correct"
+            )
+            gameState.recordWordResult(wordResult)
+        }
+
+        // Increment score
+        gameState.incrementScore()
+        score = gameState.score
+
+        // Stop STT listening
+        stt.stopListening()
+
+        // Show success feedback
+        showCorrectFeedback = true
+
+        // Play success sound (system sound)
+        AudioServicesPlaySystemSound(1057) // Tink sound
+
+        // Brief delay to let user see the success
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1.0 second
+
+        // Hide feedback
+        showCorrectFeedback = false
+
+        // Move to next word
+        try? await loadNextWord()
+    }
+
+    // MARK: - Silence Detection & AI Guess Trigger
+
+    private func startSilenceDetection() {
+        // Cancel existing timer
+        silenceCheckTimer?.invalidate()
+
+        // Start new timer to check for silence after 1 second
+        silenceCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+            Task { @MainActor in
+                self.checkForSilence()
             }
-        }
-
-        // Check if we have enough description
-        let wordCount = accumulatedTranscript.components(separatedBy: .whitespaces).count
-        if wordCount >= 5 || (lastGuessTime == nil && wordCount >= 3) {
-            // Request AI guess
-            Task { await requestAIGuess() }
         }
     }
 
-    // MARK: - AI Guess
+    private func checkForSilence() {
+        guard let lastSpeech = lastSpeechTime else { return }
 
-    private func debouncedRequestAIGuess(with transcript: String) {
-        // Update accumulated transcript with partial transcript
-        accumulatedTranscript = transcript
+        let now = Date()
+        let silenceDuration = now.timeIntervalSince(lastSpeech)
 
+        // If more than 1 second of silence, treat as pause
+        if silenceDuration >= 1.0 {
+            print("🤫 Silence detected after \(String(format: "%.1f", silenceDuration))s")
+            handleSilenceDetected(accumulatedTranscript)
+        }
+    }
+
+    private func handleSilenceDetected(_ currentTranscript: String) {
         // Check if already loading a guess
         guard !isLoadingGuess else { return }
 
-        // Check time since last guess
+        // Use the current accumulated transcript (don't add again)
+        guard !currentTranscript.isEmpty else { return }
+
         let now = Date()
-        if let lastGuess = lastGuessTime {
-            let elapsed = now.timeIntervalSince(lastGuess)
+        let totalWordCount = accumulatedTranscript.components(separatedBy: .whitespaces).filter { !$0.isEmpty }.count
 
-            // If less than min interval, wait
-            if elapsed < minGuessInterval {
+        // First guess: must wait at least 3 seconds from word start
+        if lastGuessTime == nil {
+            guard let startTime = wordStartTime else { return }
+            let elapsed = now.timeIntervalSince(startTime)
+
+            if elapsed < firstGuessDelay {
+                print("⏱️ Waiting for first guess delay... (\(String(format: "%.1f", elapsed))s / \(firstGuessDelay)s)")
                 return
             }
 
-            // If more than max interval, force a guess
-            if elapsed > maxGuessInterval {
+            // After 3 seconds, need at least some words
+            if totalWordCount >= 1 {
+                print("🎯 First guess triggered after \(String(format: "%.1f", elapsed))s with \(totalWordCount) words")
                 Task { await requestAIGuess() }
-                return
             }
+            return
         }
 
-        // Check if we have enough description to make a guess
-        let wordCount = transcript.components(separatedBy: .whitespaces).count
-        if wordCount >= 5 || (lastGuessTime == nil && wordCount >= 3) {
-            Task { await requestAIGuess() }
+        // Subsequent guesses: check new words since last guess
+        if lastGuessTime != nil {
+            // Calculate words added since last guess
+            let newWordCount = totalWordCount - wordCountAtLastGuess
+
+            print("📊 Total words: \(totalWordCount), Words at last guess: \(wordCountAtLastGuess), New words: \(newWordCount)")
+
+            // If user said 1+ new words and paused (silence detected), request guess
+            if newWordCount >= 1 {
+                print("🎯 Silence-triggered guess with \(newWordCount) new words")
+                Task { await requestAIGuess() }
+            }
         }
     }
 
@@ -279,16 +433,12 @@ class GameViewModel_ModeB: ObservableObject {
         guard !accumulatedTranscript.isEmpty else { return }
         guard !isLoadingGuess else { return }
 
-        // Check max interval
-        if let lastGuess = lastGuessTime {
-            let elapsed = Date().timeIntervalSince(lastGuess)
-            if elapsed > maxGuessInterval {
-                // Force a guess
-            }
-        }
-
         isLoadingGuess = true
         lastGuessTime = Date()
+
+        // Save current word count for next comparison
+        let currentWordCount = accumulatedTranscript.components(separatedBy: .whitespaces).filter { !$0.isEmpty }.count
+        wordCountAtLastGuess = currentWordCount
 
         // Log the transcript being sent to server
         print("📤 Sending to server - Transcript: \"\(accumulatedTranscript)\"")
@@ -304,8 +454,33 @@ class GameViewModel_ModeB: ObservableObject {
             previousGuesses.append(guess)
             aiGuess = guess
 
+            // Add to history (newest first, keep max 5)
+            aiGuessHistory.insert(guess, at: 0)
+            if aiGuessHistory.count > 5 {
+                aiGuessHistory.removeLast()
+            }
+
             // Don't speak - Mode B is text-only for now
             print("🤖 AI guessed: \(guess)")
+
+            // Check if AI guessed correctly
+            if let currentWord = self.currentWord {
+                let result = self.answerJudge.judge(
+                    userAnswer: guess,
+                    correctWord: currentWord
+                )
+
+                // Also check if the guess contains the answer word
+                let normalizedGuess = guess.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                let normalizedAnswer = currentWord.word.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                let containsAnswer = normalizedGuess.contains(normalizedAnswer)
+
+                if result == .correct || containsAnswer {
+                    // AI got it right! Increment score and move to next word
+                    print("✅ AI CORRECT! Moving to next word")
+                    await self.handleAICorrectGuess()
+                }
+            }
 
         } catch {
             print("❌ Failed to get AI guess: \(error)")
@@ -313,46 +488,6 @@ class GameViewModel_ModeB: ObservableObject {
         }
 
         isLoadingGuess = false
-    }
-
-    // MARK: - User Judgment
-
-    func judgeCorrect() async {
-        // Increment score
-        gameState.incrementScore()
-        score = gameState.score
-
-        // No TTS feedback - text only
-        print("✅ Correct! Moving to next word")
-
-        // Stop STT temporarily
-        stt.stopListening()
-
-        // Wait briefly, then load next word
-        try? await Task.sleep(nanoseconds: 800_000_000) // 0.8 seconds
-        try? await loadNextWord()
-    }
-
-    func judgeIncorrect() async {
-        // No TTS feedback - text only
-        print("❌ Incorrect, try another guess")
-
-        // Clear AI guess to allow new guess
-        aiGuess = ""
-
-        // Continue listening (STT keeps running)
-        // AI will guess again after more description
-    }
-
-    func judgeClose() async {
-        // No TTS feedback - text only
-        print("⚠️ Close, but not exactly")
-
-        // Clear AI guess to allow new guess
-        aiGuess = ""
-
-        // Continue listening
-        // AI will try another guess
     }
 
     // MARK: - Timer
@@ -384,6 +519,8 @@ class GameViewModel_ModeB: ObservableObject {
 
     func cleanup() {
         stopTimer()
+        silenceCheckTimer?.invalidate()
+        silenceCheckTimer = nil
         tts.stop()
         stt.stopListening()
         cancellables.removeAll()

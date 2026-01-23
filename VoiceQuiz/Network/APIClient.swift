@@ -132,6 +132,52 @@ class APIClient {
         }
     }
 
+    // MARK: - Mode B: English Correction
+
+    /// Request English correction for user's transcript
+    /// - Parameters:
+    ///   - transcript: Full game transcript to correct
+    ///   - words: Array of word strings for context
+    /// - Returns: Corrected text with tips
+    func requestCorrection(transcript: String, words: [String]) async throws -> String {
+        let url = URL(string: "\(baseURL)/modeB/correct")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "transcript": transcript,
+            "words": words
+        ]
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        do {
+            let (data, response) = try await session.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw APIError.invalidResponse
+            }
+
+            guard httpResponse.statusCode == 200 else {
+                let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+                throw APIError.serverError(httpResponse.statusCode, errorMessage)
+            }
+
+            let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            guard let correctionText = json?["correctionText"] as? String else {
+                throw APIError.decodingError(NSError(domain: "APIClient", code: -1))
+            }
+
+            return correctionText
+
+        } catch let error as APIError {
+            throw error
+        } catch {
+            throw APIError.networkError(error)
+        }
+    }
+
     // MARK: - Health Check
 
     /// Check if backend is healthy

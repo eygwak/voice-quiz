@@ -35,21 +35,33 @@ struct GameView_ModeB: View {
                 // User Transcript
                 transcriptView
 
-                // Judgment Controls (only shown when AI has guessed)
-                if !viewModel.aiGuess.isEmpty {
-                    judgmentControlsView
-                        .padding()
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                } else {
-                    // Pass Button
-                    passButtonView
-                        .padding()
-                }
+                // Pass Button (always visible)
+                passButtonView
+                    .padding()
             }
 
             // Loading Overlay
             if viewModel.isLoadingGuess {
                 LoadingOverlay(message: "AI is thinking...")
+            }
+
+            // Correct Answer Feedback
+            if viewModel.showCorrectFeedback {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+
+                    VStack(spacing: 20) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 120))
+                            .foregroundStyle(.green)
+
+                        Text("Correct!")
+                            .font(.system(size: 48, weight: .bold))
+                            .foregroundStyle(.green)
+                    }
+                    .transition(.scale.combined(with: .opacity))
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -82,7 +94,8 @@ struct GameView_ModeB: View {
             ResultView(
                 mode: .modeB,
                 score: viewModel.score,
-                totalTime: 60.0
+                totalTime: 60.0,
+                gameSession: viewModel.completedGameSession
             )
         }
     }
@@ -193,26 +206,39 @@ struct GameView_ModeB: View {
                     .transition(.scale.combined(with: .opacity))
             }
 
-            // AI's Guess
-            if !viewModel.aiGuess.isEmpty {
-                VStack(spacing: 12) {
-                    Text("AI's Guess")
+            // AI's Guess History (Recent 5, newest first)
+            if !viewModel.aiGuessHistory.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("AI's Guesses")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .padding(.horizontal)
 
-                    Text(viewModel.aiGuess)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.blue.opacity(0.1))
-                        )
+                    VStack(spacing: 8) {
+                        ForEach(Array(viewModel.aiGuessHistory.enumerated()), id: \.offset) { index, guess in
+                            HStack(spacing: 8) {
+                                Text("\(index + 1).")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 20, alignment: .trailing)
+
+                                Text(guess)
+                                    .font(index == 0 ? .title3 : .body)
+                                    .fontWeight(index == 0 ? .semibold : .regular)
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(index == 0 ? Color.blue.opacity(0.15) : Color.blue.opacity(0.05))
+                            )
+                        }
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
-                .transition(.scale.combined(with: .opacity))
+                .transition(.opacity)
             }
         }
     }
@@ -239,75 +265,6 @@ struct GameView_ModeB: View {
             )
         }
         .padding()
-    }
-
-    // MARK: - Judgment Controls
-
-    private var judgmentControlsView: some View {
-        VStack(spacing: 12) {
-            Text("Was the AI's guess correct?")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: 12) {
-                // Incorrect Button
-                Button {
-                    Task {
-                        await viewModel.judgeIncorrect()
-                    }
-                } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title)
-                        Text("Incorrect")
-                            .font(.caption)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.red.opacity(0.2))
-                    .foregroundColor(.red)
-                    .cornerRadius(12)
-                }
-
-                // Close Button
-                Button {
-                    Task {
-                        await viewModel.judgeClose()
-                    }
-                } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: "exclamationmark.circle.fill")
-                            .font(.title)
-                        Text("Close")
-                            .font(.caption)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.orange.opacity(0.2))
-                    .foregroundColor(.orange)
-                    .cornerRadius(12)
-                }
-
-                // Correct Button
-                Button {
-                    Task {
-                        await viewModel.judgeCorrect()
-                    }
-                } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title)
-                        Text("Correct")
-                            .font(.caption)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green.opacity(0.2))
-                    .foregroundColor(.green)
-                    .cornerRadius(12)
-                }
-            }
-        }
     }
 
     // MARK: - Pass Button

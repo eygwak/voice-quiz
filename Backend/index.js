@@ -50,12 +50,12 @@ User's description so far:
 "${transcript}"${guessesContext}
 
 Rules:
-- NEVER ask questions like "Is it...?" or "Does it...?"
-- ONLY make ONE direct guess in the format: "I think it is [WORD]" or simply "[WORD]"
-- Make educated guesses based on the clues
-- Try a different word if your previous guesses were wrong
-
-Make your guess now in English (one word or short phrase only).`;
+- NEVER ask questions.
+- ONLY make ONE direct guess in the format: "Answer"
+- Make educated guesses based on the clues.
+- Try a different word if your previous guesses were wrong.
+- If there is NOT enough information to make a new guess, respond with an EMPTY response (no text at all).
+`;
 }
 
 // Mode A: AI describes word
@@ -144,6 +144,62 @@ app.post("/modeB/guess", apiLimiter, async (req, res) => {
     res.json({ guessText });
   } catch (error) {
     console.error("Mode B guess error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Mode B: English correction
+app.post("/modeB/correct", apiLimiter, async (req, res) => {
+  try {
+    const { transcript, words } = req.body;
+
+    if (!transcript || transcript.trim().length === 0) {
+      return res.status(400).json({ error: "Missing or empty transcript" });
+    }
+
+    if (!words || !Array.isArray(words)) {
+      return res.status(400).json({ error: "Missing or invalid words array" });
+    }
+
+    console.log(`[${new Date().toISOString()}] Mode B correction - transcript length: ${transcript.length}, words: ${words.length}`);
+
+    const wordsList = words.join(", ");
+
+    const prompt = `다음은 스피드퀴즈 게임 중 음성 인식으로 기록된 사용자의 영어 발화입니다. 영어 학습자인 사용자를 위해 틀리거나 부자연스러운 영어는 자연스러운 영어 표현으로 고쳐주고 간단한 설명을 붙여주세요. 음성인식 오류가 있을 수 있음을 고려하고 게임 제시어를 참고하여 내용을 파악해주세요. 고칠 것이 없다면 칭찬만 한마디 해주면 됩니다. 친근한 한국어 존댓말을 사용해주세요.
+
+제시어: ${wordsList}
+
+사용자 발화 내용:
+"${transcript}"`;
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 500,
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("OpenAI API error:", response.status, errText);
+      return res.status(response.status).json({ error: "OpenAI API failed", details: errText });
+    }
+
+    const data = await response.json();
+    const correctionText = data.choices[0]?.message?.content || "";
+
+    console.log(`[${new Date().toISOString()}] Mode B correction completed`);
+
+    res.json({ correctionText });
+  } catch (error) {
+    console.error("Mode B correction error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

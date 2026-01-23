@@ -75,7 +75,8 @@ struct GameView_ModeA: View {
             ResultView(
                 mode: .modeA,
                 score: viewModel.score,
-                totalTime: 60.0
+                totalTime: 60.0,
+                gameSession: nil
             )
         }
     }

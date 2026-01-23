@@ -18,6 +18,8 @@ struct GameSession: Codable, Identifiable {
     let startTime: Date
     let endTime: Date
     let words: [WordResult]
+    let fullTranscript: String
+    var correction: String?  // AI-generated English correction
 
     var duration: TimeInterval {
         return endTime.timeIntervalSince(startTime)
@@ -38,7 +40,9 @@ struct GameSession: Codable, Identifiable {
         passCount: Int,
         startTime: Date,
         endTime: Date,
-        words: [WordResult]
+        words: [WordResult],
+        fullTranscript: String = "",
+        correction: String? = nil
     ) {
         self.id = id
         self.mode = mode.rawValue
@@ -50,6 +54,8 @@ struct GameSession: Codable, Identifiable {
         self.startTime = startTime
         self.endTime = endTime
         self.words = words
+        self.fullTranscript = fullTranscript
+        self.correction = correction
     }
 }
 
@@ -59,7 +65,6 @@ struct WordResult: Codable, Identifiable {
     let attempts: Int
     let passed: Bool
     let isCorrect: Bool
-    let userTranscript: String?
     let aiTranscript: String?
     let judgment: String?
     let timestamp: Date
@@ -70,7 +75,6 @@ struct WordResult: Codable, Identifiable {
         attempts: Int,
         passed: Bool,
         isCorrect: Bool,
-        userTranscript: String? = nil,
         aiTranscript: String? = nil,
         judgment: String? = nil,
         timestamp: Date = Date()
@@ -80,7 +84,6 @@ struct WordResult: Codable, Identifiable {
         self.attempts = attempts
         self.passed = passed
         self.isCorrect = isCorrect
-        self.userTranscript = userTranscript
         self.aiTranscript = aiTranscript
         self.judgment = judgment
         self.timestamp = timestamp

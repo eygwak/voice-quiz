@@ -59,6 +59,12 @@ class GameSessionState {
     // Category
     private(set) var category: String
 
+    // Word results
+    private(set) var wordResults: [WordResult] = []
+
+    // Full transcript (continuous for entire game)
+    private(set) var fullTranscript: String = ""
+
     init(mode: GameMode, category: String) {
         self.mode = mode
         self.category = category
@@ -132,5 +138,35 @@ class GameSessionState {
 
     var isActive: Bool {
         return phase == .playing || phase == .paused
+    }
+
+    // MARK: - Word Results
+
+    func recordWordResult(_ result: WordResult) {
+        wordResults.append(result)
+    }
+
+    // MARK: - Transcript
+
+    func appendToTranscript(_ text: String) {
+        if !fullTranscript.isEmpty && !text.isEmpty {
+            fullTranscript += " "
+        }
+        fullTranscript += text
+    }
+
+    func toGameSession(categoryName: String) -> GameSession {
+        return GameSession(
+            mode: mode,
+            categoryId: category,
+            categoryName: categoryName,
+            score: score,
+            maxScore: wordResults.count,
+            passCount: passCount,
+            startTime: startTime ?? Date(),
+            endTime: endTime ?? Date(),
+            words: wordResults,
+            fullTranscript: fullTranscript
+        )
     }
 }

@@ -99,6 +99,11 @@ Cloud Run backend (Node.js + Express) provides:
   - Request: `{ transcriptSoFar, category, previousGuesses }`
   - Response: `{ guessText }` (GPT-4o-mini generated guess)
 
+- `POST /modeB/correct` - AI corrects English usage
+  - Request: `{ transcript, words }` (full game transcript + word list for context)
+  - Response: `{ correctionText }` (GPT-4o-mini generated correction in Korean)
+  - Prompt: Provides corrections and tips in friendly Korean, considering speech recognition errors
+
 - `GET /health` - Health check endpoint
 - Rate limiting (IP + deviceId)
 - OpenAI API key storage (never exposed to client)
@@ -125,7 +130,7 @@ Words are stored in `assets/words.json` with structure:
 }
 ```
 
-Categories: Food, Animals, Jobs, Objects, Minecraft
+Categories: Food, Animals, Jobs, Objects, Places, Actions, Emotions, Sports, Nature, Minecraft
 
 ### Answer Judgment Logic
 
@@ -139,30 +144,42 @@ Similarity: Levenshtein distance (normalized)
 
 ## Development Roadmap
 
-**Current Status: Phase 0 Complete (MVP v0.4 - Local STT/TTS)**
+**Current Status: MVP Complete (v1.0 - Fully Functional)**
 
 Completed phases:
 - **Phase 0:** Infrastructure setup
   - ✅ Backend REST API (GPT-4o-mini integration)
   - ✅ Local STT/TTS services (Apple Speech + AVSpeechSynthesizer)
   - ✅ iOS 16.0+ compatibility with #available checks
-  - ✅ Network layer (APIClient for modeA/modeB endpoints)
+  - ✅ Network layer (APIClient for modeA/modeB/correct endpoints)
   - ✅ Data models (GameSession, WordResult, storage layer)
 
-Next phases:
-1. **Phase 1:** GameState/ViewModel implementation
-   - Mode A: AI describes → User guesses flow
-   - Mode B: User describes → AI guesses flow
-   - Integrate STT/TTS/APIClient services
+- **Phase 1:** GameState/ViewModel implementation
+  - ✅ Mode A: AI describes → User guesses flow
+  - ✅ Mode B: User describes → AI guesses flow with penalty system
+  - ✅ STT/TTS/APIClient integration
+  - ✅ Partial transcript-based AI guessing
+  - ✅ Continuous transcript storage (single transcript per game)
 
-2. **Phase 2:** UI implementation
-   - HomeView (mode selection, category selection)
-   - GameView_ModeA and GameView_ModeB
-   - ResultView (score, history)
+- **Phase 2:** UI implementation
+  - ✅ HomeView (2-stage navigation: mode selection → category selection)
+  - ✅ 4x4 category grid with bright, friendly design
+  - ✅ White backgrounds with single-color accents (blue/purple)
+  - ✅ GameView_ModeA and GameView_ModeB with Pass button
+  - ✅ ResultView with score, history, and View Transcript feature
+  - ✅ GameHistoryView with session list
+  - ✅ TranscriptView with word list, full transcript, and AI correction
 
-3. **Phase 3:** Integration and testing
-   - End-to-end flow testing
-   - UX tuning (STT accuracy, TTS timing)
+- **Phase 3:** English Learning Features
+  - ✅ Post-game English correction (GPT-4o-mini in Korean)
+  - ✅ Correction caching (request once, store forever)
+  - ✅ Word list context for better correction accuracy
+  - ✅ Loading/error states for async corrections
+
+Future enhancements:
+- Advanced statistics and progress tracking
+- Custom word lists
+- Multiplayer mode
 
 ## Important Implementation Notes
 
@@ -179,8 +196,27 @@ Next phases:
 
 ### State Management
 - Use MVVM pattern consistently
-- Game state machine should handle: Round timing, Score tracking, Pass count (max 2), Word progression
-- Local storage for: Best scores, Game history, Review transcripts (post-MVP)
+- Game state machine handles: Round timing, Score tracking, Pass count (max 2), Word progression
+- Local storage (UserDefaults): Best scores, Game history, Full transcripts, AI corrections
+
+### Transcript Storage (Mode B)
+- **Architecture:** Single continuous transcript per game (not per-word)
+- **Storage timing:** Transcript accumulated during gameplay and saved on:
+  - Word transitions (correct answer, pass, penalty)
+  - Game end
+- **Data flow:**
+  1. `accumulatedTranscript` in ViewModel collects STT during current word
+  2. On transition/end, append to `GameState.fullTranscript`
+  3. Saved to `GameSession.fullTranscript` in storage
+- **Correction:** Requested on first TranscriptView open, cached in `GameSession.correction`
+
+### UI Navigation
+- **Entry point:** HomeView (no permission landing page)
+- **2-stage navigation:**
+  1. ModeSelectionView: Choose "You Guess" (Mode A) or "You Describe" (Mode B)
+  2. CategorySelectionView: Choose category from 4x4 grid
+- **Design:** White backgrounds, single-color accents (blue/purple), high contrast text
+- **Post-game:** ResultView → TranscriptView (Mode B only) → GameHistoryView
 
 ## Reference Documents
 

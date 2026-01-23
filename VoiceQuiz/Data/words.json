@@ -1,466 +1,640 @@
 {
   "version": 1,
-  "generated_at": "2025-12-13T11:03:50Z",
+  "generated_at": "2026-01-09T00:00:00Z",
   "categories": [
     {
       "id": "food",
-      "title": "Delicious Food",
+      "title": "Food & Drinks",
       "words": [
-        {
-          "word": "pizza",
-          "synonyms": [
-            "pepperoni pizza",
-            "cheese pizza",
-            "a slice of pizza"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "pizza",
-            "pepperoni",
-            "cheese",
-            "slice",
-            "italian"
-          ]
-        },
-        {
-          "word": "kimchi",
-          "synonyms": [
-            "spicy cabbage",
-            "fermented cabbage"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "kimchi",
-            "cabbage",
-            "fermented",
-            "korean",
-            "spicy"
-          ]
-        },
-        {
-          "word": "pancake",
-          "synonyms": [
-            "flapjack",
-            "hotcake"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "pancake",
-            "syrup",
-            "breakfast",
-            "flour",
-            "pan"
-          ]
-        },
-        {
-          "word": "sushi",
-          "synonyms": [
-            "raw fish rolls",
-            "rice rolls"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "sushi",
-            "japanese",
-            "raw",
-            "roll",
-            "rice"
-          ]
-        },
-        {
-          "word": "avocado",
-          "synonyms": [
-            "alligator pear"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "avocado",
-            "guacamole",
-            "green",
-            "toast",
-            "pit"
-          ]
-        },
-        {
-          "word": "popcorn",
-          "synonyms": [
-            "movie snack",
-            "popped corn"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "popcorn",
-            "corn",
-            "kernels",
-            "butter",
-            "movie"
-          ]
-        }
+        {"word": "pizza", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hamburger", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hot dog", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sandwich", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "salad", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "steak", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chicken", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fried chicken", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ramen", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "noodles", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pasta", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "spaghetti", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lasagna", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "sushi", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sashimi", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "tempura", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "rice", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fried rice", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "curry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "naan", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "dumpling", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "taco", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "burrito", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "nachos", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "soup", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chicken soup", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "miso soup", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "pho", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "kimchi", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "bibimbap", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "bulgogi", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "samgyeopsal", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "tteokbokki", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "kimbap", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "japchae", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "ice cream", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "gelato", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "sorbet", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "cake", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cheesecake", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "donut", "synonyms": ["doughnut"], "difficulty": 1, "taboo": []},
+        {"word": "muffin", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cookie", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "brownie", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chocolate", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "candy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "popcorn", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cereal", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "yogurt", "synonyms": ["yoghurt"], "difficulty": 1, "taboo": []},
+        {"word": "milk", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cheese", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "butter", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bread", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "toast", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pancake", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "waffle", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "omelet", "synonyms": ["omelette"], "difficulty": 1, "taboo": []},
+        {"word": "scrambled eggs", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bacon", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sausage", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "apple", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "banana", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "orange", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "grape", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "strawberry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "blueberry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "watermelon", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mango", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pineapple", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "peach", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pear", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tomato", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "potato", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "french fries", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "onion rings", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "coffee", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "latte", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "espresso", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "americano", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tea", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "green tea", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bubble tea", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "soda", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "juice", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "smoothie", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lemonade", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hot chocolate", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "honey", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jam", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "peanut butter", "synonyms": [], "difficulty": 1, "taboo": []}
       ]
     },
     {
       "id": "animals",
-      "title": "Animals",
+      "title": "Animals & Plants",
       "words": [
-        {
-          "word": "giraffe",
-          "synonyms": [
-            "long-necked animal"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "giraffe",
-            "neck",
-            "spots",
-            "africa",
-            "tall"
-          ]
-        },
-        {
-          "word": "penguin",
-          "synonyms": [
-            "flightless bird in the cold"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "penguin",
-            "antarctica",
-            "bird",
-            "ice",
-            "tuxedo"
-          ]
-        },
-        {
-          "word": "dolphin",
-          "synonyms": [
-            "smart sea mammal"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "dolphin",
-            "ocean",
-            "mammal",
-            "swim",
-            "smart"
-          ]
-        },
-        {
-          "word": "kangaroo",
-          "synonyms": [
-            "marsupial that hops"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "kangaroo",
-            "australia",
-            "pouch",
-            "hop",
-            "marsupial"
-          ]
-        },
-        {
-          "word": "octopus",
-          "synonyms": [
-            "eight-armed sea animal"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "octopus",
-            "tentacles",
-            "eight",
-            "sea",
-            "ink"
-          ]
-        },
-        {
-          "word": "hedgehog",
-          "synonyms": [
-            "small spiky animal"
-          ],
-          "difficulty": 3,
-          "taboo": [
-            "hedgehog",
-            "spikes",
-            "spiny",
-            "small",
-            "roll up"
-          ]
-        }
+        {"word": "dog", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "rabbit", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hamster", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mouse", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "rat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "horse", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cow", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pig", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sheep", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "goat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chicken", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "duck", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "goose", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "turkey", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lion", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tiger", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "leopard", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cheetah", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "elephant", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "giraffe", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "zebra", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "rhinoceros", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "hippopotamus", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "monkey", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "gorilla", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chimpanzee", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "panda", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "koala", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "kangaroo", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bear", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "polar bear", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "wolf", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fox", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "deer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "moose", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "raccoon", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "squirrel", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "dolphin", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "whale", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shark", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "octopus", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "squid", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jellyfish", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "starfish", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "crab", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lobster", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shrimp", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "turtle", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "crocodile", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "alligator", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "snake", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lizard", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "gecko", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "chameleon", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "frog", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "toad", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "butterfly", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bee", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ant", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "spider", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ladybug", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "dragonfly", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "eagle", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hawk", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "owl", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "parrot", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "penguin", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "flamingo", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "peacock", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "goldfish", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "salmon", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tuna", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "coral", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "seaweed", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mushroom", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cactus", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "rose", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tulip", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sunflower", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "daisy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "orchid", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "bamboo", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pine tree", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "oak tree", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "maple tree", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "grass", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "moss", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "fern", "synonyms": [], "difficulty": 2, "taboo": []}
+      ]
+    },
+    {
+      "id": "objects",
+      "title": "Objects",
+      "words": [
+        {"word": "phone", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "smartphone", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cellphone", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "laptop", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tablet", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "computer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "keyboard", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mouse", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "monitor", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "charger", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "power bank", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "headphones", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "earbuds", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "speaker", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "camera", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tripod", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "microphone", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "television", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "remote control", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lamp", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "flashlight", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "candle", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "umbrella", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "raincoat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "backpack", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "suitcase", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "wallet", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "purse", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "key", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "keychain", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lock", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "door", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "doorbell", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "clock", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "alarm clock", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "calendar", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "notebook", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "book", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bookmark", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pen", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pencil", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "eraser", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ruler", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "scissors", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tape", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "glue", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "stapler", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "paper clip", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "glasses", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sunglasses", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cap", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "scarf", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "gloves", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jacket", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sweater", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hoodie", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jeans", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "belt", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "watch", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ring", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "necklace", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bracelet", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mirror", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "comb", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hairbrush", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "toothbrush", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "toothpaste", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "soap", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shampoo", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "towel", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tissue", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "toilet paper", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "trash can", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "broom", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mop", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "vacuum cleaner", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bucket", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "plate", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bowl", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cup", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mug", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fork", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "spoon", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "knife", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chopsticks", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pan", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pot", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "kettle", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "refrigerator", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "microwave", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "toaster", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "washing machine", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "air conditioner", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "heater", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fan", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bed", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pillow", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "blanket", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sofa", "synonyms": [], "difficulty": 1, "taboo": []}
+      ]
+    },
+    {
+      "id": "places",
+      "title": "Places & Landmarks",
+      "words": [
+        {"word": "Seoul", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Busan", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Jeju Island", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Tokyo", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Osaka", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Kyoto", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "New York City", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Los Angeles", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Las Vegas", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "San Francisco", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "London", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Paris", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Rome", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Venice", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Barcelona", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Dubai", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Sydney", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Beijing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Shanghai", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Hong Kong", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Bangkok", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Singapore", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Hawaii", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Grand Canyon", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Niagara Falls", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Yellowstone National Park", "synonyms": [], "difficulty": 3, "taboo": []},
+        {"word": "Eiffel Tower", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Louvre Museum", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Colosseum", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Big Ben", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "London Eye", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Statue of Liberty", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Times Square", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Hollywood", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Mount Everest", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Great Wall of China", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Machu Picchu", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Christ the Redeemer", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Pyramids of Giza", "synonyms": ["pyramids"], "difficulty": 2, "taboo": []},
+        {"word": "Taj Mahal", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Santorini", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Petra", "synonyms": [], "difficulty": 3, "taboo": []},
+        {"word": "Angkor Wat", "synonyms": [], "difficulty": 3, "taboo": []},
+        {"word": "Golden Gate Bridge", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Great Barrier Reef", "synonyms": [], "difficulty": 2, "taboo": []}
       ]
     },
     {
       "id": "jobs",
       "title": "Jobs",
       "words": [
-        {
-          "word": "firefighter",
-          "synonyms": [
-            "fire fighter",
-            "fireman"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "firefighter",
-            "fire",
-            "truck",
-            "hose",
-            "rescue"
-          ]
-        },
-        {
-          "word": "dentist",
-          "synonyms": [
-            "tooth doctor"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "dentist",
-            "teeth",
-            "tooth",
-            "clinic",
-            "cavity"
-          ]
-        },
-        {
-          "word": "pilot",
-          "synonyms": [
-            "airplane driver",
-            "aircraft pilot"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "pilot",
-            "plane",
-            "cockpit",
-            "fly",
-            "airport"
-          ]
-        },
-        {
-          "word": "chef",
-          "synonyms": [
-            "cook",
-            "head cook"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "chef",
-            "cook",
-            "kitchen",
-            "restaurant",
-            "recipe"
-          ]
-        },
-        {
-          "word": "detective",
-          "synonyms": [
-            "investigator"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "detective",
-            "case",
-            "crime",
-            "investigate",
-            "clues"
-          ]
-        },
-        {
-          "word": "electrician",
-          "synonyms": [
-            "wire specialist"
-          ],
-          "difficulty": 3,
-          "taboo": [
-            "electrician",
-            "wires",
-            "electric",
-            "power",
-            "circuit"
-          ]
-        }
+        {"word": "doctor", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "nurse", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "dentist", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pharmacist", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "veterinarian", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "teacher", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "professor", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "student", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "engineer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "software developer", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "designer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "architect", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "construction worker", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "electrician", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "plumber", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "carpenter", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "mechanic", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "driver", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "taxi driver", "synonyms": ["cab driver"], "difficulty": 1, "taboo": []},
+        {"word": "pilot", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "flight attendant", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chef", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "baker", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "barista", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "waiter", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bartender", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "farmer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "police officer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "firefighter", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lawyer", "synonyms": [], "difficulty": 1, "taboo": []}
       ]
     },
     {
-      "id": "objects",
-      "title": "Everyday Objects",
+      "id": "actions",
+      "title": "Actions",
       "words": [
-        {
-          "word": "umbrella",
-          "synonyms": [
-            "rain cover"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "umbrella",
-            "rain",
-            "wet",
-            "handle",
-            "shade"
-          ]
-        },
-        {
-          "word": "backpack",
-          "synonyms": [
-            "school bag",
-            "rucksack"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "backpack",
-            "bag",
-            "straps",
-            "school",
-            "carry"
-          ]
-        },
-        {
-          "word": "refrigerator",
-          "synonyms": [
-            "fridge"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "refrigerator",
-            "fridge",
-            "cold",
-            "kitchen",
-            "food"
-          ]
-        },
-        {
-          "word": "headphones",
-          "synonyms": [
-            "earphones",
-            "headset"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "headphones",
-            "music",
-            "ears",
-            "listen",
-            "wireless"
-          ]
-        },
-        {
-          "word": "flashlight",
-          "synonyms": [
-            "torch"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "flashlight",
-            "light",
-            "dark",
-            "battery",
-            "torch"
-          ]
-        },
-        {
-          "word": "calendar",
-          "synonyms": [
-            "schedule board"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "calendar",
-            "dates",
-            "month",
-            "year",
-            "schedule"
-          ]
-        }
+        {"word": "run", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "walk", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jump", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hop", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "skip", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "dance", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shout", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "whisper", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "talk", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "listen", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hear", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "see", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "watch", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "look", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "point", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "clap", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "wave", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "smile", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "laugh", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sleep", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "wake up", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sit", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "stand", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lie down", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "eat", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "drink", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cook", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "clean", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "wash", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shower", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "swim", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "dive", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "throw", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "catch", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "kick", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "push", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pull", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lift", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "carry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "open", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "close", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "write", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "read", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "draw", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "paint", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "type", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "drive", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ride", "synonyms": [], "difficulty": 1, "taboo": []}
+      ]
+    },
+    {
+      "id": "emotions",
+      "title": "Emotions & States",
+      "words": [
+        {"word": "happy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sad", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "angry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "excited", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "scared", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "afraid", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "nervous", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "calm", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "relaxed", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tired", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sleepy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "bored", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "surprised", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shocked", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "confused", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "proud", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "shy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "embarrassed", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lonely", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "confident", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jealous", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "grateful", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "thankful", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "disappointed", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "worried", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "stressed", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hungry", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "thirsty", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sick", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "healthy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cold", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hot", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "energetic", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lazy", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "curious", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "brave", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "homesick", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "peaceful", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "in love", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "annoyed", "synonyms": [], "difficulty": 1, "taboo": []}
+      ]
+    },
+    {
+      "id": "sports",
+      "title": "Sports & Hobbies",
+      "words": [
+        {"word": "soccer", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "basketball", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "baseball", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "volleyball", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tennis", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "badminton", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "table tennis", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "golf", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "swimming", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cycling", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "running", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hiking", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "climbing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "skiing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "snowboarding", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "skating", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "surfing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fishing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "camping", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "yoga", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "pilates", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "boxing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "martial arts", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "dancing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "singing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "playing guitar", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "playing piano", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "drawing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "painting", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "photography", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cooking", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "baking", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "gardening", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "knitting", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "gaming", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "chess", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "reading", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "writing", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "traveling", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "collecting", "synonyms": [], "difficulty": 1, "taboo": []}
+      ]
+    },
+    {
+      "id": "nature",
+      "title": "Nature & Weather",
+      "words": [
+        {"word": "sun", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "moon", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "star", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cloud", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sky", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "rain", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "snow", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hail", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "thunder", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lightning", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "rainbow", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "wind", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "storm", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "typhoon", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "hurricane", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "tornado", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "fog", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mist", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "frost", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "ice", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "fire", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "water", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "river", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "lake", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "ocean", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "sea", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "mountain", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "hill", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "forest", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "jungle", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "desert", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "island", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "beach", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "volcano", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "earthquake", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "tsunami", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "glacier", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "waterfall", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cliff", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "cave", "synonyms": [], "difficulty": 1, "taboo": []}
       ]
     },
     {
       "id": "minecraft",
       "title": "Minecraft",
       "words": [
-        {
-          "word": "creeper",
-          "synonyms": [
-            "green exploding mob"
-          ],
-          "difficulty": 2,
-          "taboo": [
-            "creeper",
-            "explode",
-            "green",
-            "mob",
-            "hiss"
-          ]
-        },
-        {
-          "word": "crafting table",
-          "synonyms": [
-            "workbench"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "crafting",
-            "table",
-            "workbench",
-            "grid",
-            "recipe"
-          ]
-        },
-        {
-          "word": "pickaxe",
-          "synonyms": [
-            "mining tool"
-          ],
-          "difficulty": 1,
-          "taboo": [
-            "pickaxe",
-            "mine",
-            "tool",
-            "stone",
-            "diamond"
-          ]
-        },
-        {
-          "word": "redstone",
-          "synonyms": [
-            "Minecraft electricity"
-          ],
-          "difficulty": 3,
-          "taboo": [
-            "redstone",
-            "power",
-            "wire",
-            "circuit",
-            "signal"
-          ]
-        },
-        {
-          "word": "nether",
-          "synonyms": [
-            "hell-like dimension"
-          ],
-          "difficulty": 3,
-          "taboo": [
-            "nether",
-            "dimension",
-            "portal",
-            "lava",
-            "ghast"
-          ]
-        },
-        {
-          "word": "ender dragon",
-          "synonyms": [
-            "final boss dragon"
-          ],
-          "difficulty": 3,
-          "taboo": [
-            "ender",
-            "dragon",
-            "boss",
-            "end",
-            "fight"
-          ]
-        }
+        {"word": "Steve", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Alex", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Creeper", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Zombie", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Skeleton", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Spider", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Enderman", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Villager", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Iron Golem", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Ghast", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Blaze", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Slime", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Wither", "synonyms": [], "difficulty": 3, "taboo": []},
+        {"word": "Ender Dragon", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Dirt", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Stone", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Cobblestone", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Sand", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Wood", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Planks", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Coal", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Iron Ore", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Gold Ore", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Diamond Ore", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Emerald", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Redstone", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Obsidian", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Bedrock", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Netherrack", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Pickaxe", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Sword", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Bow", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Shield", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Armor", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Torch", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Bucket", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Chest", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Furnace", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Crafting Table", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Overworld", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Nether", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "The End", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Village", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Stronghold", "synonyms": [], "difficulty": 2, "taboo": []},
+        {"word": "Cow", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Pig", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Sheep", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Chicken", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Horse", "synonyms": [], "difficulty": 1, "taboo": []},
+        {"word": "Wolf", "synonyms": [], "difficulty": 1, "taboo": []}
       ]
     }
   ]
