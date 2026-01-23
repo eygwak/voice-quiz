@@ -55,7 +55,7 @@ struct ModeSelectionView: View {
 
                 Text("Choose Your Game Mode")
                     .font(.title3)
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color(white: 0.3))
             }
             .padding(.bottom, 40)
 
@@ -154,7 +154,7 @@ struct CategorySelectionView: View {
 
                 Text("Choose a Category")
                     .font(.title3)
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(selectedMode == .modeA ? .blue : .purple)
             }
             .padding(.bottom, 30)
 
@@ -248,7 +248,7 @@ struct ModeCard: View {
 
                     Text(subtitle)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color(white: 0.3))
                         .multilineTextAlignment(.leading)
                 }
 
@@ -285,7 +285,7 @@ struct CategoryCard: View {
                 Text(category.title)
                     .font(.caption)
                     .fontWeight(isSelected ? .bold : .medium)
-                    .foregroundColor(isSelected ? .white : .primary)
+                    .foregroundColor(isSelected ? .white : modeColor)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
             }

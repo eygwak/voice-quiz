@@ -87,14 +87,29 @@ class GameViewModel_ModeB: ObservableObject {
 
                 // Check if user said the answer word (penalty)
                 if let currentWord = self.currentWord, !transcript.isEmpty {
+                    // Normalize both transcript and answer for comparison
+                    let normalizedTranscript = transcript.lowercased()
+                        .components(separatedBy: .whitespacesAndNewlines)
+                        .joined(separator: " ")
+                    let normalizedAnswer = currentWord.word.lowercased()
+
+                    // Check both exact match and contains
                     let result = self.answerJudge.judge(
                         userAnswer: transcript,
                         correctWord: currentWord
                     )
 
-                    if result == .correct {
+                    // Also check if transcript contains the answer as a whole word
+                    let words = normalizedTranscript.components(separatedBy: .whitespaces)
+                    let containsAnswerWord = words.contains { word in
+                        // Remove punctuation from word
+                        let cleanWord = word.filter { $0.isLetter }
+                        return cleanWord == normalizedAnswer
+                    }
+
+                    if result == .correct || containsAnswerWord {
                         // User said the answer! Penalty - no points, skip to next word
-                        print("⚠️ PENALTY: User said the answer word!")
+                        print("⚠️ PENALTY: User said the answer word! (transcript: \"\(transcript)\")")
                         self.handlePenalty()
                         return
                     }
